@@ -1,0 +1,266 @@
+appid,name,type,is_free,price_eur,currency,release_raw,release_date,age_years,genres,early_access,has_description,metacritic,reviews,price_band,age_band,stratum
+500,Left 4 Dead,game,False,9.69,EUR,"17 Nov, 2008",2008-11-17,18.0,Action,False,True,89,58783,<10,>=10,<10_>=10
+3310,Chuzzle Deluxe,game,False,4.99,EUR,"30 Aug, 2006",2006-08-30,20.2,Casual,False,True,,1497,<10,>=10,<10_>=10
+4560,Company of Heroes - Legacy Edition,game,False,32.99,EUR,"17 Jul, 2007",2007-07-17,19.3,Action|Strategy,False,True,93,4847,>=25,>=10,>=25_>=10
+9180,Commander Keen,game,False,4.99,EUR,"3 Aug, 2007",2007-08-03,19.3,Action,False,True,,1472,<10,>=10,<10_>=10
+9850,Codename: Panzers - Cold War,game,False,14.99,EUR,"6 May, 2009",2009-05-06,17.5,Simulation|Strategy,False,True,,229,10-24.99,>=10,10-24.99_>=10
+12210,Grand Theft Auto IV: The Complete Edition,game,False,19.99,EUR,"24 Mar, 2020",2020-03-24,6.6,Action|Adventure,False,True,90,184506,10-24.99,5-<10,10-24.99_5-<10
+12330,Darkstar One,game,False,8.79,EUR,"13 Feb, 2008",2008-02-13,18.7,Action,False,True,71,596,<10,>=10,<10_>=10
+32450,LEGO® Indiana Jones™ 2: The Adventure Continues,game,False,19.5,EUR,"18 Feb, 2010",2010-02-18,16.7,Adventure,False,True,66,1282,10-24.99,>=10,10-24.99_>=10
+65600,Gothic 3: Forsaken Gods Enhanced Edition,game,False,9.99,EUR,"22 Mar, 2011",2011-03-22,15.6,RPG,False,True,,1019,<10,>=10,<10_>=10
+80330,The Blackwell Legacy,game,False,4.49,EUR,"13 Jan, 2012",2012-01-13,14.8,Adventure|Indie,False,True,80,1352,<10,>=10,<10_>=10
+94000,Dinner Date,game,False,3.29,EUR,"1 Mar, 2011",2011-03-01,15.7,Indie|Casual,False,True,,498,<10,>=10,<10_>=10
+200170,Worms Revolution,game,False,14.99,EUR,"10 Oct, 2012",2012-10-10,14.1,Strategy,False,True,73,5678,10-24.99,>=10,10-24.99_>=10
+220440,DmC: Devil May Cry,game,False,29.99,EUR,"24 Jan, 2013",2013-01-24,13.8,Action|Adventure,False,True,85,21121,>=25,>=10,>=25_>=10
+224940,Legacy of Kain: Soul Reaver 2 (2001),game,False,6.99,EUR,"6 Dec, 2012",2012-12-06,13.9,Action|Adventure,False,True,77,907,<10,>=10,<10_>=10
+236790,Agricultural Simulator 2013 - Steam Edition,game,False,4.99,EUR,"7 Jun, 2013",2013-06-07,13.4,Casual|Simulation,False,True,,394,<10,>=10,<10_>=10
+246760,Legends of Eisenwald,game,False,19.99,EUR,"2 Jul, 2015",2015-07-02,11.4,Adventure|Indie|RPG|Strategy,False,True,71,1400,10-24.99,>=10,10-24.99_>=10
+252390,DwarfCorp,game,False,2.99,EUR,"1 Feb, 2019",2019-02-01,7.8,Indie|Simulation|Strategy,False,True,,158,<10,5-<10,<10_5-<10
+261530,Lifeless Planet Premier Edition,game,False,9.99,EUR,"6 Jun, 2014",2014-06-06,12.4,Action|Adventure|Indie,False,True,,2539,<10,>=10,<10_>=10
+269210,Hero Siege,game,False,7.79,EUR,"29 Jan, 2014",2014-01-29,12.8,Action|Adventure|Indie|Massively Multiplayer|RPG,False,True,,36991,<10,>=10,<10_>=10
+274700,868-HACK,game,False,5.65,EUR,"26 Jan, 2015",2015-01-26,11.8,Indie|Strategy,False,True,,123,<10,>=10,<10_>=10
+277470,The Book of Legends,game,False,9.75,EUR,"14 Mar, 2014",2014-03-14,12.7,Adventure|Indie|RPG,False,True,,139,<10,>=10,<10_>=10
+293340,The Good Life,game,False,9.75,EUR,"21 Nov, 2014",2014-11-21,12.0,Casual|Indie|Simulation,False,True,62,146,<10,>=10,<10_>=10
+303800,The Witcher Adventure Game,game,False,9.99,EUR,"27 Nov, 2014",2014-11-27,12.0,Adventure|Strategy,False,True,68,1242,<10,>=10,<10_>=10
+306130,The Elder Scrolls® Online,game,False,19.99,EUR,"22 May, 2017",2017-05-22,9.5,Action|Adventure|Massively Multiplayer|RPG,False,True,80,134744,10-24.99,5-<10,10-24.99_5-<10
+310490,Crookz - The Big Heist,game,False,9.99,EUR,"25 Aug, 2015",2015-08-25,11.2,Simulation|Strategy,False,True,74,214,<10,>=10,<10_>=10
+311040,Rulers of Nations,game,False,19.99,EUR,"16 Jul, 2014",2014-07-16,12.3,Strategy,False,True,63,149,10-24.99,>=10,10-24.99_>=10
+313690,LEGO® Batman™ 3: Beyond Gotham,game,False,19.99,EUR,"11 Nov, 2014",2014-11-11,12.0,Action|Adventure,False,True,,7628,10-24.99,>=10,10-24.99_>=10
+314330,DROD: Gunthro and the Epic Blunder,game,False,9.99,EUR,"23 Sep, 2016",2016-09-23,10.1,Adventure|Indie|Strategy,False,True,,146,<10,>=10,<10_>=10
+315860,Celestian Tales: Old North,game,False,12.99,EUR,"10 Aug, 2015",2015-08-10,11.2,Indie|RPG,False,True,,349,10-24.99,>=10,10-24.99_>=10
+316160,Broken Sword 4 - the Angel of Death (2006),game,False,4.99,EUR,"4 Nov, 2014",2014-11-04,12.0,Adventure|Casual|Indie,False,True,,461,<10,>=10,<10_>=10
+317970,Dusk 12,game,False,3.99,EUR,"22 Aug, 2014",2014-08-22,12.2,Action,False,True,,231,<10,>=10,<10_>=10
+325610,Total War: ATTILA,game,False,19.99,EUR,"17 Feb, 2015",2015-02-17,11.7,Strategy,False,True,80,27156,10-24.99,>=10,10-24.99_>=10
+326670,Warhammer Quest (Classic),game,False,27.99,EUR,"7 Jan, 2015",2015-01-07,11.8,RPG|Strategy,False,True,55,899,>=25,>=10,>=25_>=10
+327400,Sid Meier's Colonization (Classic),game,False,6.99,EUR,"9 Oct, 2014",2014-10-09,12.1,Adventure|Simulation,False,True,,1060,<10,>=10,<10_>=10
+330820,2064: Read Only Memories,game,False,8.99,EUR,"6 Oct, 2015",2015-10-06,11.1,Adventure|Indie,False,True,80,709,<10,>=10,<10_>=10
+338980,MOAI: Build Your Dream,game,False,6.99,EUR,"26 Feb, 2015",2015-02-26,11.7,Casual|Simulation|Strategy,False,True,,194,<10,>=10,<10_>=10
+349250,Copy Kitty,game,False,14.79,EUR,"19 Apr, 2018",2018-04-19,8.6,Action|Indie,False,True,,353,10-24.99,5-<10,10-24.99_5-<10
+349300,Littlewitch Romanesque: Editio Regia,game,False,12.49,EUR,"3 Apr, 2015",2015-04-03,11.6,Casual|Simulation|Strategy,False,True,,119,10-24.99,>=10,10-24.99_>=10
+351290,SURVIVAL: Postapocalypse Now,game,False,12.49,EUR,"3 Dec, 2019",2019-12-03,6.9,Action|Adventure|Indie|Massively Multiplayer|Simulation,False,True,,7743,10-24.99,5-<10,10-24.99_5-<10
+353700,The Deadly Tower of Monsters,game,False,14.99,EUR,"19 Jan, 2016",2016-01-19,10.8,Action|Adventure|Indie,False,True,73,1066,10-24.99,>=10,10-24.99_>=10
+359100,Q.U.B.E. 2,game,False,17.99,EUR,"13 Mar, 2018",2018-03-13,8.7,Action|Adventure|Indie|Simulation,False,True,76,1019,10-24.99,5-<10,10-24.99_5-<10
+365160,Kona,game,False,14.99,EUR,"17 Mar, 2017",2017-03-17,9.6,Adventure|Indie,False,True,73,2826,10-24.99,5-<10,10-24.99_5-<10
+373390,Contradiction: Spot The Liar,game,False,12.79,EUR,"10 Jul, 2015",2015-07-10,11.3,Adventure|Indie|RPG|Strategy,False,True,,2841,10-24.99,>=10,10-24.99_>=10
+377880,Eternal Destiny,game,False,9.75,EUR,"21 Apr, 2016",2016-04-21,10.6,Strategy,False,True,,225,<10,>=10,<10_>=10
+392160,X4: Foundations,game,False,49.99,EUR,"30 Nov, 2018",2018-11-30,7.9,Action|Simulation|Strategy,False,True,,25590,>=25,5-<10,>=25_5-<10
+396640,TowerClimb,game,False,14.99,EUR,"22 Sep, 2015",2015-09-22,11.1,Action|Adventure|Indie|RPG,False,True,,316,10-24.99,>=10,10-24.99_>=10
+403830,The Consuming Shadow,game,False,0.99,EUR,"20 Nov, 2015",2015-11-20,11.0,Adventure,False,True,,330,<10,>=10,<10_>=10
+406290,Twilight Struggle,game,False,8.19,EUR,"13 Apr, 2016",2016-04-13,10.6,Simulation|Strategy,False,True,,2587,<10,>=10,<10_>=10
+431260,Cursed,game,False,4.99,EUR,"17 Jun, 2016",2016-06-17,10.4,Adventure|Indie,False,True,,565,<10,>=10,<10_>=10
+435250,Deadhunt,game,False,4.99,EUR,"12 Jan, 2016",2016-01-12,10.8,Action,False,True,,183,<10,>=10,<10_>=10
+464650,Runbow,game,False,14.99,EUR,"18 Nov, 2016",2016-11-18,10.0,Action|Adventure|Casual|Indie|Racing,False,True,,107,10-24.99,>=10,10-24.99_>=10
+471010,Seven: Enhanced Edition,game,False,27.49,EUR,"1 Dec, 2017",2017-12-01,8.9,Action|Adventure|Indie|RPG,False,True,,1434,>=25,5-<10,>=25_5-<10
+499620,Ultimate Booster Experience,game,False,4.99,EUR,"14 Jul, 2016",2016-07-14,10.3,Action|Adventure|Casual|Simulation,False,True,,316,<10,>=10,<10_>=10
+501080,Fishing: Barents Sea,game,False,19.99,EUR,"7 Feb, 2018",2018-02-07,8.8,Simulation,False,True,69,2398,10-24.99,5-<10,10-24.99_5-<10
+503830,The Life Of Greather,game,False,1.99,EUR,"25 Aug, 2016",2016-08-25,10.2,Adventure|Indie|RPG,False,True,,107,<10,>=10,<10_>=10
+513930,J.U.R : Japan Underground Racing,game,False,5.19,EUR,"17 Aug, 2016",2016-08-17,10.2,Casual|Indie|Racing|Simulation,False,True,,158,<10,>=10,<10_>=10
+529950,12 orbits,game,False,1.99,EUR,"24 Oct, 2016",2016-10-24,10.0,Action|Casual|Indie|Sports,False,True,,266,<10,>=10,<10_>=10
+531680,8-Bit Invaders!,game,False,14.79,EUR,"16 Dec, 2016",2016-12-16,9.9,Indie|Simulation|Strategy,False,True,,402,10-24.99,5-<10,10-24.99_5-<10
+536270,Ancestors: The Humankind Odyssey,game,False,36.99,EUR,"27 Aug, 2020",2020-08-27,6.2,Action|Adventure|Indie|RPG,False,True,,9902,>=25,5-<10,>=25_5-<10
+537990,Heroine Anthem Zero -Sacrifice-,game,False,9.99,EUR,"22 Dec, 2016",2016-12-22,9.9,Adventure|Indie|RPG,False,True,,590,<10,5-<10,<10_5-<10
+541310,Tiny Thor,game,False,19.99,EUR,"5 Jun, 2023",2023-06-05,3.4,Action|Adventure|Indie,False,True,75,211,10-24.99,<5,10-24.99_<5
+576260,Winds Of Trade,game,False,9.99,EUR,"13 Feb, 2017",2017-02-13,9.7,Simulation|Strategy,False,True,,154,<10,5-<10,<10_5-<10
+585890,Sweetest Monster,game,False,5.99,EUR,"6 Feb, 2017",2017-02-06,9.8,Adventure|Casual|Indie,False,True,,559,<10,5-<10,<10_5-<10
+595440,CPU Invaders,game,False,24.99,EUR,"17 Feb, 2017",2017-02-17,9.7,Casual|Indie,False,True,,499,10-24.99,5-<10,10-24.99_5-<10
+596620,Gas Guzzlers: Combat Carnage,game,False,4.99,EUR,"9 Mar, 2017",2017-03-09,9.7,Action|Racing,False,True,58,153,<10,5-<10,<10_5-<10
+602520,NEKOPARA Vol. 3,game,False,9.75,EUR,"25 May, 2017",2017-05-25,9.5,Casual|Indie,False,True,,11185,<10,5-<10,<10_5-<10
+603700,The Low Road,game,False,14.79,EUR,"26 Jul, 2017",2017-07-26,9.3,Adventure|Casual|Indie,False,True,72,147,10-24.99,5-<10,10-24.99_5-<10
+603930,Battle Princess Madelyn,game,False,16.79,EUR,"5 Dec, 2018",2018-12-05,7.9,Action|Indie,False,True,73,112,10-24.99,5-<10,10-24.99_5-<10
+618140,Barro,game,False,4.9,EUR,"28 Mar, 2018",2018-03-28,8.6,Casual|Indie|Racing,False,True,,3278,<10,5-<10,<10_5-<10
+626660,Flipping Death,game,False,16.79,EUR,"6 Aug, 2018",2018-08-06,8.3,Adventure|Indie,False,True,75,228,10-24.99,5-<10,10-24.99_5-<10
+628890,NOBUNAGA'S AMBITION: Taishi,game,False,59.99,EUR,"29 Nov, 2017",2017-11-29,8.9,Simulation,False,True,,804,>=25,5-<10,>=25_5-<10
+640990,Fashioning Little Miss Lonesome,game,False,22.99,EUR,"8 Sep, 2017",2017-09-08,9.2,Adventure,False,True,,343,10-24.99,5-<10,10-24.99_5-<10
+673000,High Hell,game,False,9.75,EUR,"23 Oct, 2017",2017-10-23,9.0,Action|Indie,False,True,79,1422,<10,5-<10,<10_5-<10
+683830,Weable,game,False,6.89,EUR,"22 Aug, 2017",2017-08-22,9.2,Action|Casual|Indie,False,True,,354,<10,5-<10,<10_5-<10
+702110,THE LAST BLADE 2,game,False,9.99,EUR,"17 Nov, 2017",2017-11-17,9.0,Action,False,True,,383,<10,5-<10,<10_5-<10
+715010,Diamo XL,game,False,1.89,EUR,"13 Oct, 2017",2017-10-13,9.1,Action|Casual|Indie,False,True,,549,<10,5-<10,<10_5-<10
+762610,Russian Subway Dogs,game,False,14.79,EUR,"2 Aug, 2018",2018-08-02,8.3,Action|Indie,False,True,85,208,10-24.99,5-<10,10-24.99_5-<10
+773370,Exo One,game,False,16.49,EUR,"18 Nov, 2021",2021-11-18,5.0,Adventure|Casual|Indie|Simulation,False,True,,5086,10-24.99,5-<10,10-24.99_5-<10
+785780,OF MICE AND SAND -REVISED-,game,False,9.99,EUR,"28 Mar, 2018",2018-03-28,8.6,Simulation|Strategy,False,True,,325,<10,5-<10,<10_5-<10
+791750,President Trump The Way In Uganda,game,False,0.99,EUR,"6 Feb, 2018",2018-02-06,8.8,Adventure|Casual|Indie,False,True,,113,<10,5-<10,<10_5-<10
+792660,The Operational Art of War IV,game,False,38.99,EUR,"15 Oct, 2018",2018-10-15,8.1,Simulation|Strategy,False,True,,290,>=25,5-<10,>=25_5-<10
+817230,Acid Spy,game,False,4.99,EUR,"8 Jun, 2018",2018-06-08,8.4,Action|Indie,False,True,,166,<10,5-<10,<10_5-<10
+834740,Circle Empires,game,False,8.79,EUR,"8 Aug, 2018",2018-08-08,8.3,Casual|Indie|Strategy,False,True,,3747,<10,5-<10,<10_5-<10
+848480,Creeper World 4,game,False,24.5,EUR,"3 Dec, 2020",2020-12-03,5.9,Action|Casual|Indie|Simulation|Strategy,False,True,,4577,10-24.99,5-<10,10-24.99_5-<10
+865610,Tails Noir,game,False,24.99,EUR,"8 Jun, 2021",2021-06-08,5.4,Adventure|Indie,False,True,,2614,10-24.99,5-<10,10-24.99_5-<10
+867490,Remyadry,game,False,8.19,EUR,"9 Jul, 2018",2018-07-09,8.3,Indie|RPG,False,True,,547,<10,5-<10,<10_5-<10
+875210,Kingdom Heroes 8,game,False,24.99,EUR,"12 Jan, 2021",2021-01-12,5.8,Action|RPG|Simulation|Strategy,False,True,,12807,10-24.99,5-<10,10-24.99_5-<10
+895870,Project Wingman,game,False,24.99,EUR,"1 Dec, 2020",2020-12-01,5.9,Action|Indie|Simulation,False,True,75,18878,10-24.99,5-<10,10-24.99_5-<10
+909470,Touch Type Tale - Strategic Typing,game,False,19.99,EUR,"4 Nov, 2024",2024-11-04,2.0,Indie|Strategy,False,True,,107,10-24.99,<5,10-24.99_<5
+914140,Hentai Dojo,game,False,1.99,EUR,"24 Aug, 2018",2018-08-24,8.2,Casual|Indie,False,True,,123,<10,5-<10,<10_5-<10
+916930,War Trigger Classic,game,False,4.99,EUR,"22 Jan, 2019",2019-01-22,7.8,Action|Indie,False,True,,867,<10,5-<10,<10_5-<10
+928520,Story of Eve - A Hero's Study,game,False,2.39,EUR,"16 Oct, 2018",2018-10-16,8.1,Indie|RPG|Strategy,False,True,,487,<10,5-<10,<10_5-<10
+930640,Code Brown: A Game About Pooping,game,False,2.99,EUR,"9 Nov, 2018",2018-11-09,8.0,Indie|Simulation,False,True,,196,<10,5-<10,<10_5-<10
+940680,The Textorcist: The Story of Ray Bibbia,game,False,14.99,EUR,"14 Feb, 2019",2019-02-14,7.7,Action|Indie,False,True,78,1180,10-24.99,5-<10,10-24.99_5-<10
+944920,Nanotale - Typing Chronicles,game,False,19.99,EUR,"31 Mar, 2021",2021-03-31,5.6,Adventure|RPG,False,True,68,702,10-24.99,5-<10,10-24.99_5-<10
+954740,Terminator: Resistance,game,False,39.99,EUR,"14 Nov, 2019",2019-11-14,7.0,Action|Adventure|RPG,False,True,,16880,>=25,5-<10,>=25_5-<10
+972740,KOBOLD: Chapter I,game,False,4.99,EUR,"14 Nov, 2018",2018-11-14,8.0,Adventure,False,True,,270,<10,5-<10,<10_5-<10
+984470,Big Dipper,game,False,3.99,EUR,"7 Jan, 2019",2019-01-07,7.8,Indie|Simulation,False,True,,151,<10,5-<10,<10_5-<10
+986020,Kunoichi Botan,game,False,12.49,EUR,"3 Jan, 2019",2019-01-03,7.8,Indie|RPG,False,True,,530,10-24.99,5-<10,10-24.99_5-<10
+987720,ONINAKI,game,False,49.99,EUR,"22 Aug, 2019",2019-08-22,7.2,Action|RPG,False,True,,335,>=25,5-<10,>=25_5-<10
+1022480,KAMIKO,game,False,3.99,EUR,"26 Jun, 2019",2019-06-26,7.4,Action|Adventure,False,True,,213,<10,5-<10,<10_5-<10
+1033220,The Amazing Shrinking Giraffe,game,False,3.99,EUR,"16 Feb, 2020",2020-02-16,6.7,Adventure|Simulation|Strategy,False,True,,122,<10,5-<10,<10_5-<10
+1042920,Unsouled,game,False,16.79,EUR,"28 Apr, 2022",2022-04-28,4.5,Action|Adventure|Indie|RPG,False,True,,270,10-24.99,<5,10-24.99_<5
+1059230,When I Was Young,game,False,9.99,EUR,"10 Jul, 2020",2020-07-10,6.3,Action|Adventure|Indie,False,True,,161,<10,5-<10,<10_5-<10
+1078920,Main Assembly,game,False,19.99,EUR,"26 Jan, 2021",2021-01-26,5.8,Simulation,False,True,,1005,10-24.99,5-<10,10-24.99_5-<10
+1083190,Disc Creatures,game,False,14.79,EUR,"17 Oct, 2019",2019-10-17,7.1,Adventure|Indie|RPG,False,True,,211,10-24.99,5-<10,10-24.99_5-<10
+1096570,SONG OF HORROR COMPLETE EDITION,game,False,29.99,EUR,"31 Oct, 2019",2019-10-31,7.0,Adventure|Indie|Free To Play,False,True,,1960,>=25,5-<10,>=25_5-<10
+1097750,Ezaron Defense,game,False,6.59,EUR,"15 Apr, 2021",2021-04-15,5.6,Action|Adventure|Casual|Indie|Strategy,False,True,,101,<10,5-<10,<10_5-<10
+1100180,Yousei Daisensou ~ Touhou Sangetsusei,game,False,8.99,EUR,"2 Aug, 2019",2019-08-02,7.3,Action|Indie,False,True,,137,<10,5-<10,<10_5-<10
+1122040,Kaede the Eliminator / Eliminator 小枫,game,False,20.99,EUR,"30 Sep, 2019",2019-09-30,7.1,Action|Indie,False,True,,545,10-24.99,5-<10,10-24.99_5-<10
+1126990,PBA Pro Bowling,game,False,14.79,EUR,"23 Oct, 2019",2019-10-23,7.0,Simulation|Sports,False,True,,180,10-24.99,5-<10,10-24.99_5-<10
+1133500,Overthrown,game,False,24.99,EUR,"18 Mar, 2026",2026-03-18,0.6,Indie|Simulation|Strategy,False,True,,260,10-24.99,<5,10-24.99_<5
+1137410,Depraved Awakening,game,False,8.19,EUR,"30 Aug, 2019",2019-08-30,7.2,Indie,False,True,,607,<10,5-<10,<10_5-<10
+1140290,Murder by Numbers,game,False,12.49,EUR,"6 Mar, 2020",2020-03-06,6.7,Adventure|Indie,False,True,79,1161,10-24.99,5-<10,10-24.99_5-<10
+1142500,Fun with Ragdolls: The Game,game,False,12.49,EUR,"17 Sep, 2019",2019-09-17,7.1,Action|Indie|Simulation,False,True,,4497,10-24.99,5-<10,10-24.99_5-<10
+1149510,The Leopard Catgirl in Miaoli,game,False,4.99,EUR,"13 Dec, 2019",2019-12-13,6.9,Adventure|Indie,False,True,,168,<10,5-<10,<10_5-<10
+1154850,9th Dawn III,game,False,13.29,EUR,"5 Oct, 2020",2020-10-05,6.1,Action|Adventure|Indie|RPG,False,True,,503,10-24.99,5-<10,10-24.99_5-<10
+1163740,Card Hog,game,False,5.89,EUR,"4 Dec, 2023",2023-12-04,2.9,Casual|Indie|RPG|Strategy,False,True,,464,<10,<5,<10_<5
+1198040,Wide Ocean Big Jacket,game,False,6.59,EUR,"4 Feb, 2020",2020-02-04,6.8,Casual|Indie,False,True,,270,<10,5-<10,<10_5-<10
+1207650,Suzerain,game,False,18.99,EUR,"4 Dec, 2020",2020-12-04,5.9,Adventure|Indie|RPG,False,True,81,10715,10-24.99,5-<10,10-24.99_5-<10
+1208590,Temple Of Snek,game,False,13.99,EUR,"15 Feb, 2023",2023-02-15,3.7,Action|Adventure|Indie,False,True,,101,10-24.99,<5,10-24.99_<5
+1240050,Pendragon: Narrative Tactics,game,False,13.99,EUR,"22 Sep, 2020",2020-09-22,6.1,Adventure|Indie|RPG|Strategy,False,True,74,116,10-24.99,5-<10,10-24.99_5-<10
+1247110,Chasing Light,game,False,9.99,EUR,"5 May, 2020",2020-05-05,6.5,Adventure|Indie|Simulation,False,True,,234,<10,5-<10,<10_5-<10
+1283770,Grey Skies: A War of the Worlds Story,game,False,11.79,EUR,"5 Nov, 2020",2020-11-05,6.0,Action|Adventure|Indie,False,True,,158,10-24.99,5-<10,10-24.99_5-<10
+1302050,Milky Way Prince – The Vampire Star,game,False,14.79,EUR,"13 Aug, 2020",2020-08-13,6.2,Adventure|Indie,False,True,,293,10-24.99,5-<10,10-24.99_5-<10
+1304680,Voidigo,game,False,4.59,EUR,"8 Jun, 2023",2023-06-08,3.4,Action|Adventure|Indie,False,True,,3810,<10,<5,<10_<5
+1323830,Shanghai Summer,game,False,12.79,EUR,"7 Feb, 2024",2024-02-07,2.8,Adventure|Indie|RPG,False,True,,394,10-24.99,<5,10-24.99_<5
+1403310,Garden Simulator,game,False,14.99,EUR,"8 Sep, 2022",2022-09-08,4.2,Casual|Simulation,False,True,,361,10-24.99,<5,10-24.99_<5
+1420770,Winter Resort Simulator 2,game,False,24.95,EUR,"26 Nov, 2020",2020-11-26,6.0,Casual|Indie|Simulation,False,True,,1360,10-24.99,5-<10,10-24.99_5-<10
+1424660,9-nine-:Episode 4,game,False,19.5,EUR,"19 Mar, 2021",2021-03-19,5.6,Casual,False,True,,1502,10-24.99,5-<10,10-24.99_5-<10
+1429500,Frontier Hunter: Erza’s Wheel of Fortune,game,False,24.5,EUR,"26 Jul, 2024",2024-07-26,2.3,Action|Adventure|Casual|Indie|RPG,False,True,,1939,10-24.99,<5,10-24.99_<5
+1478350,Game Dev Masters,game,False,12.49,EUR,"3 Jun, 2022",2022-06-03,4.4,Casual|Indie|RPG|Simulation|Strategy,False,True,,155,10-24.99,<5,10-24.99_<5
+1509230,Prop Hunt,game,False,8.19,EUR,"26 Mar, 2021",2021-03-26,5.6,Casual|Indie|Massively Multiplayer|RPG|Sports,False,True,,223,<10,5-<10,<10_5-<10
+1519710,SCHiM,game,False,16.45,EUR,"18 Jul, 2024",2024-07-18,2.3,Adventure|Casual|Indie,False,True,,230,10-24.99,<5,10-24.99_<5
+1551360,Forza Horizon 5,game,False,59.99,EUR,"8 Nov, 2021",2021-11-08,5.0,Action|Adventure|Racing|Simulation|Sports,False,True,,262777,>=25,5-<10,>=25_5-<10
+1562260,Camping Simulator: The Squad,game,False,3.99,EUR,"27 Jan, 2025",2025-01-27,1.8,Adventure|Indie|Simulation,False,True,,883,<10,<5,<10_<5
+1562430,DREDGE,game,False,39.99,EUR,"30 Mar, 2023",2023-03-30,3.6,Adventure|RPG,False,True,,48527,>=25,<5,>=25_<5
+1562940,THE LEGEND OF HEROES: HAJIMARI NO KISEKI,game,False,59.99,EUR,"25 Aug, 2021",2021-08-25,5.2,RPG,False,True,,954,>=25,5-<10,>=25_5-<10
+1567020,The Dark Pictures Anthology: The Devil in Me,game,False,39.99,EUR,"17 Nov, 2022",2022-11-17,4.0,Adventure,False,True,,3849,>=25,<5,>=25_<5
+1611420,Sea Horizon,game,False,14.99,EUR,"19 Oct, 2022",2022-10-19,4.1,Adventure|Indie|RPG,False,True,,146,10-24.99,<5,10-24.99_<5
+1642620,COLLECTION of SaGa FINAL FANTASY LEGEND,game,False,19.99,EUR,"21 Oct, 2021",2021-10-21,5.1,RPG,False,True,,178,10-24.99,5-<10,10-24.99_5-<10
+1644320,Railway Empire 2,game,False,49.99,EUR,"25 May, 2023",2023-05-25,3.5,Simulation|Strategy,False,True,75,1990,>=25,<5,>=25_<5
+1647920,Valfaris: Mecha Therion,game,False,24.5,EUR,"21 Nov, 2023",2023-11-21,3.0,Action|Indie,False,True,83,308,10-24.99,<5,10-24.99_<5
+1651960,Hextech Mayhem: A League of Legends Story™,game,False,8.99,EUR,"16 Nov, 2021",2021-11-16,5.0,Action|Indie,False,True,,2236,<10,5-<10,<10_5-<10
+1662160,K-pop Idol Stories: Road to Debut,game,False,19.99,EUR,"16 Jul, 2026",2026-07-16,0.3,Casual|Indie|RPG|Simulation,False,True,58,185,10-24.99,<5,10-24.99_<5
+1662840,PARQUET,game,False,16.49,EUR,"27 Aug, 2021",2021-08-27,5.2,Adventure|Casual,False,True,,1785,10-24.99,5-<10,10-24.99_5-<10
+1677350,EA SPORTS™ PGA TOUR™,game,False,69.99,EUR,"6 Apr, 2023",2023-04-06,3.6,RPG|Sports,False,True,,2166,>=25,<5,>=25_<5
+1707710,Puppet House,game,False,16.99,EUR,"24 Oct, 2024",2024-10-24,2.0,Action|Adventure|Indie,False,True,,212,10-24.99,<5,10-24.99_<5
+1733500,Looking for Aliens,game,False,7.79,EUR,"8 Dec, 2021",2021-12-08,4.9,Adventure|Casual|Indie,False,True,,238,<10,<5,<10_<5
+1735420,Fake Hostel,game,False,3.99,EUR,"16 Sep, 2021",2021-09-16,5.1,Adventure|Casual|Simulation,False,True,,510,<10,5-<10,<10_5-<10
+1778050,Mythmatch,game,False,19.5,EUR,"13 Mar, 2026",2026-03-13,0.7,Simulation,False,True,,127,10-24.99,<5,10-24.99_<5
+1779960,Salome's Kiss,game,False,10.79,EUR,"26 Apr, 2022",2022-04-26,4.5,Casual|Indie,False,True,,109,10-24.99,<5,10-24.99_<5
+1783960,Furry Fetishists,game,False,5.69,EUR,"19 Dec, 2021",2021-12-19,4.9,Adventure|Casual|Simulation,False,True,,157,<10,<5,<10_<5
+1796180,Peculiar Tales of Mid-Lake Pavilion,game,False,7.39,EUR,"31 Dec, 2021",2021-12-31,4.9,Casual|Indie,False,True,,160,<10,<5,<10_<5
+1803400,Beneath Oresa,game,False,21.99,EUR,"27 Sep, 2023",2023-09-27,3.1,Indie|RPG|Strategy,False,True,,1136,10-24.99,<5,10-24.99_<5
+1807750,封神榜2022,game,False,8.19,EUR,"6 Jan, 2022",2022-01-06,4.8,Adventure|Casual|Indie|RPG|Strategy,False,True,,927,<10,<5,<10_<5
+1812300,Aquatico,game,False,24.99,EUR,"12 Jan, 2023",2023-01-12,3.8,Simulation|Strategy,False,True,,791,10-24.99,<5,10-24.99_<5
+1832950,One More Gate : A Wakfu Legend,game,False,19.99,EUR,"12 Sep, 2023",2023-09-12,3.2,Adventure|Indie|RPG|Strategy,False,True,,327,10-24.99,<5,10-24.99_<5
+1834960,Neko Secret - Homecoming,game,False,5.89,EUR,"11 Apr, 2022",2022-04-11,4.6,Casual|Indie|Simulation,False,True,,107,<10,<5,<10_<5
+1858650,In Sink: A Co-op Escape Adventure,game,False,13.79,EUR,"12 Nov, 2024",2024-11-12,2.0,Adventure|Casual|Indie|Simulation|Strategy,False,True,,1487,10-24.99,<5,10-24.99_<5
+1859370,Dream House Days DX,game,False,7.99,EUR,"27 Mar, 2022",2022-03-27,4.6,Casual|Indie|Simulation|Strategy,False,True,,292,<10,<5,<10_<5
+1875580,Mina the Hollower,game,False,20.49,EUR,"28 May, 2026",2026-05-28,0.5,Action|Adventure,False,True,90,7958,10-24.99,<5,10-24.99_<5
+1890740,Voice of Cards: The Beasts of Burden,game,False,29.99,EUR,"13 Sep, 2022",2022-09-13,4.2,RPG,False,True,,169,>=25,<5,>=25_<5
+1892950,The Golden Rose: Book One,game,False,11.79,EUR,"2 Jun, 2022",2022-06-02,4.4,Casual|Indie|RPG,False,True,,159,10-24.99,<5,10-24.99_<5
+1918520,Ninja Village,game,False,7.99,EUR,"22 May, 2022",2022-05-22,4.5,Casual|Indie|RPG|Simulation|Strategy,False,True,,558,<10,<5,<10_<5
+1919550,Hidden Cats in Paris,game,False,1.99,EUR,"31 Mar, 2022",2022-03-31,4.6,Casual|Indie,False,True,,558,<10,<5,<10_<5
+1921980,Between Horizons – A Sci-Fi Detective Adventure,game,False,15.99,EUR,"25 Mar, 2024",2024-03-25,2.6,Adventure|Indie,False,True,83,413,10-24.99,<5,10-24.99_<5
+1925970,SIMULACRA 3,game,False,9.49,EUR,"25 Oct, 2022",2022-10-25,4.0,Indie|Simulation,False,True,,332,<10,<5,<10_<5
+1926590,Nancy Drew®: Mystery of the Seven Keys™,game,False,31.09,EUR,"20 Jun, 2024",2024-06-20,2.4,Adventure|Casual,False,True,,326,>=25,<5,>=25_<5
+1931240,MOTHERGUNSHIP: FORGE,game,False,16.79,EUR,"16 Jun, 2022",2022-06-16,4.4,Action|Indie,False,True,,257,10-24.99,<5,10-24.99_<5
+1970060,Tomboy Adventure,game,False,9.99,EUR,"30 Aug, 2022",2022-08-30,4.2,Adventure,False,True,,306,<10,<5,<10_<5
+1972820,Suicide Guy Deluxe Plus,game,False,8.79,EUR,"26 May, 2022",2022-05-26,4.5,Action|Adventure,False,True,,474,<10,<5,<10_<5
+2009100,Immortals of Aveum™,game,False,59.99,EUR,"21 Aug, 2023",2023-08-21,3.2,Action|Adventure,False,True,,2836,>=25,<5,>=25_<5
+2058180,Judgment,game,False,39.99,EUR,"14 Sep, 2022",2022-09-14,4.2,Action|Adventure,False,True,,9566,>=25,<5,>=25_<5
+2096080,Agent in Depth,game,False,2.99,EUR,"22 Jan, 2024",2024-01-22,2.8,Action|Casual|Indie,False,True,,108,<10,<5,<10_<5
+2113850,Spirit City: Lofi Sessions,game,False,11.79,EUR,"8 Apr, 2024",2024-04-08,2.6,Casual|Indie|Simulation,False,True,80,15504,10-24.99,<5,10-24.99_<5
+2116260,Relic Dudes,game,False,4.99,EUR,"27 Nov, 2024",2024-11-27,1.9,Action,False,True,,265,<10,<5,<10_<5
+2118130,Chicken Feet,game,False,7.79,EUR,"24 Oct, 2022",2022-10-24,4.0,Action|Adventure|Indie,False,True,,410,<10,<5,<10_<5
+2129810,Reignbreaker,game,False,9.99,EUR,"18 Mar, 2025",2025-03-18,1.6,Action|Adventure|Indie|RPG,False,True,,454,<10,<5,<10_<5
+2178100,Two Beasts Or Not To Beast!,game,False,24.5,EUR,"20 Mar, 2026",2026-03-20,0.6,Adventure|Casual|Simulation,False,True,,133,10-24.99,<5,10-24.99_<5
+2223700,Driftwood,game,False,19.99,EUR,"1 Aug, 2025",2025-08-01,1.3,Action|Adventure|Casual|Indie|Racing|Simulation|Sports,False,True,,1203,10-24.99,<5,10-24.99_<5
+2241020,Garbage Truck Simulator,game,False,4.99,EUR,"9 Feb, 2023",2023-02-09,3.7,Casual|Simulation,False,True,,166,<10,<5,<10_<5
+2245620,Tangy TD,game,False,9.99,EUR,"9 Mar, 2026",2026-03-09,0.7,Action|Indie|Strategy,False,True,,1546,<10,<5,<10_<5
+2251010,The Witch's Cauldron,game,False,8.15,EUR,"24 Jan, 2024",2024-01-24,2.8,Casual|Indie|Simulation,False,True,,576,<10,<5,<10_<5
+2258940,Mage Kanade's Futanari Dungeon Quest,game,False,24.5,EUR,"13 Mar, 2023",2023-03-13,3.7,Action|Indie|RPG,False,True,,669,10-24.99,<5,10-24.99_<5
+2276830,Kingsvein,game,False,19.5,EUR,"16 Jan, 2024",2024-01-16,2.8,Adventure|Indie|RPG|Strategy,False,True,,308,10-24.99,<5,10-24.99_<5
+2294660,The Quinfall,game,False,9.75,EUR,"6 Feb, 2026",2026-02-06,0.8,Massively Multiplayer,False,True,,12160,<10,<5,<10_<5
+2295570,Shy Cats Hidden Orchestra,game,False,4.99,EUR,"22 Jul, 2023",2023-07-22,3.3,Casual,False,True,,124,<10,<5,<10_<5
+2317300,Access Denied: Escape,game,False,4.99,EUR,"27 Jul, 2023",2023-07-27,3.3,Adventure|Indie,False,True,,219,<10,<5,<10_<5
+2353060,Invincible VS,game,False,49.99,EUR,"30 Apr, 2026",2026-04-30,0.5,Action|Adventure,False,True,,3082,>=25,<5,>=25_<5
+2364580,Titanium Court,game,False,12.49,EUR,"23 Apr, 2026",2026-04-23,0.5,Strategy,False,True,85,1202,10-24.99,<5,10-24.99_<5
+2376610,Underboard,game,False,14.79,EUR,"6 Feb, 2026",2026-02-06,0.8,RPG|Strategy,False,True,,185,10-24.99,<5,10-24.99_<5
+2384920,Firefighter Connor,game,False,8.99,EUR,"30 Apr, 2024",2024-04-30,2.5,Indie|RPG,False,True,,439,<10,<5,<10_<5
+2450130,Sex Hotel Simulator 🏩,game,False,9.75,EUR,"19 Aug, 2023",2023-08-19,3.2,Adventure|Casual|Simulation,False,True,,296,<10,<5,<10_<5
+2490790,Joyville,game,False,9.75,EUR,"23 Aug, 2023",2023-08-23,3.2,Action|Adventure|Indie,False,True,,336,<10,<5,<10_<5
+2506440,Trolddom,game,False,9.75,EUR,"5 Nov, 2025",2025-11-05,1.0,Indie|Massively Multiplayer|RPG,False,True,,204,<10,<5,<10_<5
+2525880,Sanguo's Ambition 4 :Three Kingdoms,game,False,9.75,EUR,"15 Feb, 2026",2026-02-15,0.7,Massively Multiplayer|Simulation|Strategy,False,True,,103,<10,<5,<10_<5
+2533600,Bloodthief,game,False,19.5,EUR,"22 Sep, 2025",2025-09-22,1.1,Action|Indie,False,True,,1054,10-24.99,<5,10-24.99_<5
+2535670,Frog's Adventure,game,False,4.99,EUR,"2 Aug, 2023",2023-08-02,3.3,Adventure|Casual|Indie|RPG,False,True,,203,<10,<5,<10_<5
+2635340,yahtzee girl,game,False,2.99,EUR,"2 Nov, 2023",2023-11-02,3.0,Casual|Indie|Simulation|Strategy,False,True,,742,<10,<5,<10_<5
+2640560,Udonge in Interspecies Cave,game,False,8.79,EUR,"15 Nov, 2023",2023-11-15,3.0,Action,False,True,,735,<10,<5,<10_<5
+2642570,Pinball Storm: Lokanta,game,False,5.89,EUR,"2 Jun, 2025",2025-06-02,1.4,Action|Indie,False,True,,489,<10,<5,<10_<5
+2658470,Is this Game Trying to Kill Me?,game,False,13.79,EUR,"12 Nov, 2024",2024-11-12,2.0,Action|Adventure|Indie,False,True,80,1565,10-24.99,<5,10-24.99_<5
+2660230,Kill The Shadow,game,False,16.99,EUR,"4 Aug, 2026",2026-08-04,0.3,Adventure|Casual|Indie|RPG,False,True,,491,10-24.99,<5,10-24.99_<5
+2672430,Guardians of Eden-Embrace of the Forest,game,False,10.79,EUR,"7 Mar, 2024",2024-03-07,2.7,Casual|Strategy,False,True,,686,10-24.99,<5,10-24.99_<5
+2685490,Detective Hayseed - The Cloning Madness,game,False,14.79,EUR,"12 Dec, 2023",2023-12-12,2.9,Adventure|Indie,False,True,,152,10-24.99,<5,10-24.99_<5
+2685900,Mind Over Magnet,game,False,9.75,EUR,"13 Nov, 2024",2024-11-13,2.0,Adventure|Indie,False,True,,1354,<10,<5,<10_<5
+2719740,Zero Caliber 2 Remastered,game,False,24.99,EUR,"30 Oct, 2025",2025-10-30,1.0,Action|Adventure|Casual|Indie|Simulation,False,True,,462,10-24.99,<5,10-24.99_<5
+2746030,Deep Among the Swarm,game,False,8.79,EUR,"25 Sep, 2024",2024-09-25,2.1,Strategy,False,True,,133,<10,<5,<10_<5
+2759770,Anji -Implication-,game,False,2.99,EUR,"27 Jan, 2024",2024-01-27,2.8,Adventure|Indie,False,True,,104,<10,<5,<10_<5
+2789130,Highway Police Simulator,game,False,27.99,EUR,"5 Dec, 2024",2024-12-05,1.9,Action|Adventure|Simulation,False,True,,245,>=25,<5,>=25_<5
+2797340,Cat God Ranch,game,False,9.75,EUR,"12 Sep, 2024",2024-09-12,2.2,Casual|Indie|RPG|Simulation|Strategy,False,True,,1839,<10,<5,<10_<5
+2841650,Sniper Dan,game,False,12.99,EUR,"17 Sep, 2026",2026-09-17,0.1,Casual|Indie,False,True,,227,10-24.99,<5,10-24.99_<5
+2850310,Kanon,game,False,28.99,EUR,"19 Jun, 2024",2024-06-19,2.4,Adventure|Casual|Simulation,False,True,,401,>=25,<5,>=25_<5
+2873760,Beauties! They're All After Me,game,False,8.79,EUR,"21 Jun, 2024",2024-06-21,2.4,Action|Adventure|Casual|Indie|RPG|Simulation|Strategy,False,True,,485,<10,<5,<10_<5
+2909250,Extreme Climbing,game,False,7.79,EUR,"5 Jun, 2024",2024-06-05,2.4,Adventure|Casual|Indie|Simulation|Sports,False,True,,296,<10,<5,<10_<5
+2916670,Neon Village,game,False,9.75,EUR,"24 Apr, 2026",2026-04-24,0.5,Casual|Indie|Simulation|Strategy,False,True,,151,<10,<5,<10_<5
+2998970,Summon: Joint escape,game,False,0.99,EUR,"3 Oct, 2024",2024-10-03,2.1,Action|Adventure|Indie|Massively Multiplayer|Simulation,False,True,,313,<10,<5,<10_<5
+3059010,Commando Collection,game,False,4.99,EUR,"26 Jul, 2024",2024-07-26,2.3,Action|Adventure|Casual|Indie,False,True,,1442,<10,<5,<10_<5
+3065030,The Caribou Trail,game,False,12.79,EUR,"14 May, 2026",2026-05-14,0.5,Action|Adventure|Casual|Indie,False,True,,676,10-24.99,<5,10-24.99_<5
+3069470,Dollar,game,False,0.99,EUR,"12 Jul, 2024",2024-07-12,2.3,Casual|Indie|Simulation,False,True,,1054,<10,<5,<10_<5
+3081280,Wretch: Divine Ascent,game,False,14.79,EUR,"19 Nov, 2025",2025-11-19,1.0,Action|Indie|Strategy,False,True,,987,10-24.99,<5,10-24.99_<5
+3100370,Black Jacket,game,False,14.99,EUR,"12 May, 2026",2026-05-12,0.5,Adventure|Casual|Indie|Strategy,False,True,,1964,10-24.99,<5,10-24.99_<5
+3141310,Inkshade,game,False,19.5,EUR,"14 Aug, 2025",2025-08-14,1.2,Adventure|Indie|RPG|Strategy,False,True,,630,10-24.99,<5,10-24.99_<5
+3155570,Decollate Decoration,game,False,8.79,EUR,"21 Jan, 2026",2026-01-21,0.8,Adventure|Casual|Indie,False,True,,510,<10,<5,<10_<5
+3170490,Cat Me If You Can,game,False,17.99,EUR,"8 Sep, 2026",2026-09-08,0.2,Casual|Indie,False,True,,139,10-24.99,<5,10-24.99_<5
+3191050,BRAZILIAN DRUG DEALER 3: I OPENED A PORTAL TO HELL IN THE FAVELA TRYING TO REVIVE MIT AIA I NEED TO CLOSE IT,game,False,4.99,EUR,"17 Sep, 2025",2025-09-17,1.1,Action|Adventure|Indie,False,True,,8121,<10,<5,<10_<5
+3196550,花奴令 Huanu Poems,game,False,3.99,EUR,"9 Jan, 2025",2025-01-09,1.8,Adventure|Casual|Indie|RPG|Simulation|Strategy,False,True,,117,<10,<5,<10_<5
+3207780,Love Mansion,game,False,10.79,EUR,"25 Sep, 2025",2025-09-25,1.1,Casual|Indie,False,True,,191,10-24.99,<5,10-24.99_<5
+3292260,Amenti,game,False,6.89,EUR,"5 Jan, 2025",2025-01-05,1.8,Adventure,False,True,,2263,<10,<5,<10_<5
+3298500,Failing Witch Iris and the Philosopher's Stone,game,False,8.79,EUR,"6 Jun, 2025",2025-06-06,1.4,Adventure|Indie|RPG,False,True,,119,<10,<5,<10_<5
+3306990,Corner Shop: NightShift,game,False,19.5,EUR,"12 Mar, 2026",2026-03-12,0.7,Adventure|Indie|RPG|Simulation,False,True,,216,10-24.99,<5,10-24.99_<5
+3316940,The Legend of Heroes: Trails beyond the Horizon,game,False,58.99,EUR,"15 Jan, 2026",2026-01-15,0.8,Action|Adventure|RPG,False,True,,732,>=25,<5,>=25_<5
+3347620,Deadland Garden,game,False,3.99,EUR,"11 Sep, 2025",2025-09-11,1.2,Action|Adventure|Indie|RPG,False,True,,203,<10,<5,<10_<5
+3358360,Motorcycle Night Ride,game,False,5.89,EUR,"9 Oct, 2026",2026-10-09,0.1,Indie|Racing|Simulation,False,True,,223,<10,<5,<10_<5
+3362480,Sex Apartment 💫,game,False,4.99,EUR,"7 Feb, 2025",2025-02-07,1.8,Adventure|Casual|Indie|Simulation,False,True,,153,<10,<5,<10_<5
+3371770,Funguys Swarm,game,False,9.99,EUR,"25 Aug, 2026",2026-08-25,0.2,Action,False,True,,1131,<10,<5,<10_<5
+3393280,Anime Shop Simulator ✨,game,False,14.99,EUR,"11 Sep, 2026",2026-09-11,0.2,Action|Adventure|Casual|Massively Multiplayer|RPG|Simulation|Sports,False,True,,1031,10-24.99,<5,10-24.99_<5
+3426450,LUST Company 👾,game,False,9.75,EUR,"19 Apr, 2025",2025-04-19,1.6,Adventure|Casual|Simulation,False,True,,159,<10,<5,<10_<5
+3455450,Useless Princess and the Village Renovation,game,False,11.79,EUR,"9 May, 2025",2025-05-09,1.5,Adventure|Casual|Indie|RPG,False,True,,158,10-24.99,<5,10-24.99_<5
+3470960,Tales of Eternia Remastered,game,False,29.99,EUR,"15 Oct, 2026",2026-10-15,0.1,Action|RPG,False,True,,286,>=25,<5,>=25_<5
+3474700,Plant Nursery Simulator,game,False,12.79,EUR,"22 Jun, 2026",2026-06-22,0.4,Casual|Simulation,False,True,,344,10-24.99,<5,10-24.99_<5
+3530820,Puzzling Places - 3D Jigsaw Sim,game,False,7.99,EUR,"9 Apr, 2026",2026-04-09,0.6,Indie|Simulation,False,True,,179,<10,<5,<10_<5
+3560360,Forsworn,game,False,16.49,EUR,"10 Sep, 2026",2026-09-10,0.2,Indie|RPG|Strategy,False,True,,449,10-24.99,<5,10-24.99_<5
+3562120,Magical Princess,game,False,15.49,EUR,"27 Apr, 2026",2026-04-27,0.5,Adventure|Indie|RPG|Simulation,False,True,,7932,10-24.99,<5,10-24.99_<5
+3570000,EMOTIONLESS : The Last Ticket,game,False,9.75,EUR,"7 Oct, 2025",2025-10-07,1.1,Adventure,False,True,,125,<10,<5,<10_<5
+3572090,Dominus Gladiatus,game,False,19.99,EUR,"5 Nov, 2026",2026-11-05,0.0,Simulation|Strategy,False,True,,210,10-24.99,<5,10-24.99_<5
+3586420,Iron Core: Mech Survivor,game,False,6.89,EUR,"8 Aug, 2025",2025-08-08,1.3,Action|Adventure|Casual|Strategy,False,True,,353,<10,<5,<10_<5
+3621700,Try To Drive,game,False,4.99,EUR,"11 Sep, 2025",2025-09-11,1.2,Adventure|Casual|Indie|Simulation,False,True,,193,<10,<5,<10_<5
+3649490,Stray Children,game,False,28.99,EUR,"30 Oct, 2025",2025-10-30,1.0,Action|Adventure|Indie|RPG,False,True,84,186,>=25,<5,>=25_<5
+3655390,Alien: Rogue Incursion Evolved Edition,game,False,24.99,EUR,"30 Sep, 2025",2025-09-30,1.1,Action,False,True,,916,10-24.99,<5,10-24.99_<5
+3734400,Creepy Shift: Uncle Joe’s Motel,game,False,6.99,EUR,"4 Mar, 2026",2026-03-04,0.7,Action|Indie|Simulation,False,True,,196,<10,<5,<10_<5
+3771230,纸上的魔法使,game,False,28.99,EUR,"2 Apr, 2026",2026-04-02,0.6,Casual|RPG,False,True,,236,>=25,<5,>=25_<5
+3929330,Relief,game,False,10.25,EUR,"22 Jun, 2026",2026-06-22,0.4,Indie|Strategy,False,True,,115,10-24.99,<5,10-24.99_<5
+3997900,BM game Co.,game,False,7.79,EUR,"8 Dec, 2025",2025-12-08,0.9,Indie|RPG|Simulation,False,True,,238,<10,<5,<10_<5
+4102010,Idle Chapel,game,False,6.99,EUR,"22 Jun, 2026",2026-06-22,0.4,Casual,False,True,,226,<10,<5,<10_<5
+4185050,A stupid game about pouring drinks for the P.T.A.,game,False,1.99,EUR,"17 Mar, 2026",2026-03-17,0.6,Casual|Simulation,False,True,,124,<10,<5,<10_<5
+4214320,我的美味丈夫 My Tasty Husband,game,False,8.15,EUR,"23 Jul, 2026",2026-07-23,0.3,Adventure|Indie|RPG,False,True,,451,<10,<5,<10_<5
+4317900,Infinite Ruins,game,False,5.99,EUR,"27 Jul, 2026",2026-07-27,0.3,Casual|Indie|Strategy,False,True,,137,<10,<5,<10_<5
+4450570,This Is Golf,game,False,5.19,EUR,"18 Aug, 2026",2026-08-18,0.2,Casual|Indie|Simulation|Sports|Strategy,False,True,,115,<10,<5,<10_<5
+4454430,Planet Killer,game,False,13.49,EUR,"9 Sep, 2026",2026-09-09,0.2,Action,False,True,,140,10-24.99,<5,10-24.99_<5
+4843210,Hell Deck,game,False,1.1,EUR,"3 Aug, 2026",2026-08-03,0.3,Strategy,False,True,,560,<10,<5,<10_<5
+4864560,SCRIBBLE HUNT,game,False,4.15,EUR,"22 Jul, 2026",2026-07-22,0.3,Action|Simulation,False,True,,321,<10,<5,<10_<5
+4870960,The Fame Game II: L.A. Heartbreaker,game,False,12.25,EUR,"14 Oct, 2026",2026-10-14,0.1,RPG,False,True,,576,10-24.99,<5,10-24.99_<5
+5324770,Mortal Path: Mighty Senior Brother,game,False,3.89,EUR,"3 Nov, 2026",2026-11-03,0.0,Casual|Indie,False,True,,104,<10,<5,<10_<5
