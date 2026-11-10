@@ -8,11 +8,14 @@ estructurales y de texto.
 ## Estado actual
 
 - Listado oficial de **199.314 juegos** obtenido con `IStoreService/GetAppList`.
-- **505** juegos con `appdetails` descargados.
-- **51 aptos** tras aplicar los filtros del piloto (10,1 %).
-- Objetivo: **270 juegos**, 30 por cada uno de los 9 estratos.
+- **2.505** juegos con `appdetails` descargados.
+- **265 aptos** tras aplicar los filtros (10,6 %).
+- **Piloto Fase 0:** 270 juegos (30 por estrato) para validar el pipeline.
+- **Dataset final:** muestra aleatoria de ~2.000 elegibles; no se filtra por
+  Metacritic.
 
-La descarga sigue en curso por tandas hasta llenar las cuotas.
+La descarga sigue en curso hasta tener suficientes elegibles para la muestra
+final.
 
 ## Requisitos
 
@@ -51,7 +54,7 @@ scripts/
 data/
   steam_appids.csv        # 199.314 appids
   raw/                    # respuestas de Steam sin tocar (JSONL)
-  interim/                # candidatos aptos con estrato
+  interim/                # candidatos aptos y muestra final (CSV)
   processed/              # resúmenes CSV para análisis
 docs/
   Propuesta_Tema_Practica_Final_IAO-1.pdf
@@ -100,7 +103,8 @@ relanzarlo salta los appids ya descargados.
 ```
 
 La tabla final indica cuántos juegos aptos hay en cada estrato y cuántos
-faltan para llegar a 30.
+faltan para llegar a 30. Esa cuota es solo del piloto; el dataset final se
+genera con la muestra aleatoria de la sección siguiente.
 
 ## Decisiones del piloto
 
@@ -108,20 +112,89 @@ faltan para llegar a 30.
   Access y con metadata mínima.
 - Mínimo **100 reseñas totales** (todas las lenguas y tipos de compra).
 - Mercado España: `cc=es`, precios en EUR.
-- Estratos: 3 bandas de precio (`<10`, `10–24,99`, `≥25` €) × 3 bandas de
-  edad (`<5`, `5–<10`, `≥10` años) = 9 estratos × 30 = **270 juegos**.
+- Estratos del piloto: 3 bandas de precio (`<10`, `10–24,99`, `≥25` €) × 3
+  bandas de edad (`<5`, `5–<10`, `≥10` años) = 9 estratos × 30 = **270
+  juegos**. El dataset final no usa cuotas fijas.
 - Semilla de muestreo: `20261109`.
 - Metacritic y propietarios (SteamSpy) quedan fuera de la selección y del
   clustering; solo se usarán como indicadores externos de validación.
 - Sin muestra de contraste de 50–99 reseñas: `appdetails` no publica el
   recuento por debajo de ~100.
 
+## Plan del dataset final
+
+El piloto de 270 sirve para validar el pipeline. El dataset final se construye
+con una **muestra aleatoria de elegibles**, no con cuotas fijas de 30 por
+estrato. Reglas:
+
+- Universo: los mismos filtros del piloto (`type = game`, no gratuito, precio
+  original > 0, lanzado, sin Early Access, metadata mínima y ≥100 reseñas).
+- **No filtrar por Metacritic.** Se guarda como columna y se usa solo después
+  del clustering, junto con SteamSpy. Los juegos sin nota quedan fuera de las
+  comparaciones que la requieran, pero sí entran en el clustering.
+- Muestra: 2.000 juegos elegibles (o 1.500 si el tiempo aprieta) con semilla
+  fija `20261109`. Los estratos de precio/edad se usan para describir
+  cobertura, no para forzar el tamaño de cada celda.
+- Reseñas: inglés y un máximo de 30–50 por juego para controlar el coste.
+- Clustering: modelo A (metadatos) y modelo B (metadatos + texto); silhouette,
+  Davies-Bouldin y estabilidad entre semillas.
+- Análisis externo: Metacritic y SteamSpy solo después de fijar los grupos.
+  Reportar cobertura por cluster y repetir el análisis en el subconjunto con
+  Metacritic como comprobación de robustez.
+
+### Muestra aleatoria de elegibles
+
+1. Regenerar los candidatos aptos:
+
+```bash
+.venv/bin/python scripts/analyze_candidates.py
+```
+
+2. Comprobar que `data/interim/eligible_candidates.csv` tiene al menos el
+   tamaño elegido (2.000; 1.500 si el tiempo aprieta). Si no, seguir
+   descargando `appdetails` por tandas.
+
+3. Generar la muestra con semilla fija y guardarla en
+   `data/interim/final_sample.csv`:
+
+```bash
+.venv/bin/python - <<'PY'
+import csv, random
+from collections import Counter
+from pathlib import Path
+
+SRC = Path("data/interim/eligible_candidates.csv")
+OUT = Path("data/interim/final_sample.csv")
+N = 2000  # bajar a 1500 si no se llega
+SEED = 20261109
+
+with SRC.open(encoding="utf-8") as f:
+    rows = list(csv.DictReader(f))
+if len(rows) < N:
+    raise SystemExit(f"Solo hay {len(rows)} elegibles; faltan {N - len(rows)}")
+
+random.seed(SEED)
+sample = random.sample(rows, N)
+with OUT.open("w", encoding="utf-8", newline="") as f:
+    writer = csv.DictWriter(f, fieldnames=list(rows[0]))
+    writer.writeheader()
+    writer.writerows(sample)
+
+mc = sum(1 for r in sample if r["metacritic"])
+print(f"muestra: {len(sample)} | con Metacritic: {mc} ({mc / len(sample):.1%})")
+print("por estrato:", Counter(r["stratum"] for r in sample))
+PY
+```
+
+4. No modificar `final_sample.csv` después de fijarlo. Todas las fases
+   posteriores (reseñas, clustering y análisis externo) usan esa muestra.
+
 ## Capas de datos
 
 | Capa | Formato | Uso |
 |---|---|---|
 | Raw | JSONL | Copia fiel de Steam. Nunca se modifica. |
-| Interim | CSV | Candidatos aptos con estrato asignado. |
+| Interim | CSV | Candidatos aptos, estrato y muestra final. |
 | Processed | CSV | Resúmenes para inspección y análisis. |
 
 El JSONL es la copia de seguridad cara de obtener; los CSV se pueden
@@ -129,7 +202,10 @@ regenerar en segundos sin volver a llamar a Steam.
 
 ## Pendiente
 
-- Completar los ~14.500 candidatos que faltan para llenar las cuotas.
-- Seleccionar los 270 juegos definitivos.
-- Extraer reseñas en inglés para el conjunto de comparación.
+- Completar la descarga hasta tener el tamaño elegido (2.000; 1.500 si el
+  tiempo aprieta).
+- Generar `data/interim/final_sample.csv` con la muestra aleatoria (semilla
+  `20261109`).
+- Extraer reseñas en inglés (30–50 por juego).
 - Preparar el A/B de modelos (metadatos vs. metadatos + texto).
+- Cruzar los clusters con Metacritic y SteamSpy y reportar la cobertura.
