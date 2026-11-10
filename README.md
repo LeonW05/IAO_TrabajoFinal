@@ -51,6 +51,9 @@ scripts/
   games_appdetails.py     # descarga appdetails por tandas/shards
   appdetails_summary.py   # JSONL raw -> CSV legible
   analyze_candidates.py   # embudo de filtros y cobertura por estrato
+  select_sample.py        # muestra aleatoria final de 2.000 o 1.500 juegos
+  modelo_A/               # futuros scripts de preparación y clustering con metadatos
+  modelo_B/               # futuros scripts de clustering con metadatos y texto
 data/
   steam_appids.csv        # 199.314 appids
   raw/                    # respuestas de Steam sin tocar (JSONL)
@@ -106,6 +109,26 @@ La tabla final indica cuántos juegos aptos hay en cada estrato y cuántos
 faltan para llegar a 30. Esa cuota es solo del piloto; el dataset final se
 genera con la muestra aleatoria de la sección siguiente.
 
+### 5. Elegir la muestra
+
+Cuando haya al menos 2.000 juegos elegibles y se hayan regenerado el resumen
+y los candidatos (pasos 3 y 4), ejecutar:
+
+```bash
+.venv/bin/python scripts/select_sample.py
+```
+
+El script selecciona 2.000 juegos al azar con semilla fija `20261109`, sin
+cuotas por estrato ni filtro por Metacritic, y guarda la muestra en
+`data/interim/final_sample.csv`. También muestra la distribución por estrato
+y la cobertura de Metacritic.
+
+Si se decide reducir el objetivo por falta de tiempo, se puede seleccionar
+una muestra de 1.500 juegos usando `--size 1500`. El script se detiene si no
+hay suficientes elegibles o si `final_sample.csv` ya existe. Usarlo al cerrar
+la recopilación de candidatos, antes de descargar las reseñas; la muestra
+elegida se mantiene fija para las fases posteriores.
+
 ## Decisiones del piloto
 
 - Universo: `type = game`, de pago (precio original > 0), lanzado, sin Early
@@ -158,33 +181,15 @@ estrato. Reglas:
    `data/interim/final_sample.csv`:
 
 ```bash
-.venv/bin/python - <<'PY'
-import csv, random
-from collections import Counter
-from pathlib import Path
+.venv/bin/python scripts/select_sample.py
 
-SRC = Path("data/interim/eligible_candidates.csv")
-OUT = Path("data/interim/final_sample.csv")
-N = 2000  # bajar a 1500 si no se llega
-SEED = 20261109
-
-with SRC.open(encoding="utf-8") as f:
-    rows = list(csv.DictReader(f))
-if len(rows) < N:
-    raise SystemExit(f"Solo hay {len(rows)} elegibles; faltan {N - len(rows)}")
-
-random.seed(SEED)
-sample = random.sample(rows, N)
-with OUT.open("w", encoding="utf-8", newline="") as f:
-    writer = csv.DictWriter(f, fieldnames=list(rows[0]))
-    writer.writeheader()
-    writer.writerows(sample)
-
-mc = sum(1 for r in sample if r["metacritic"])
-print(f"muestra: {len(sample)} | con Metacritic: {mc} ({mc / len(sample):.1%})")
-print("por estrato:", Counter(r["stratum"] for r in sample))
-PY
+# Alternativa si no se llega a 2.000 elegibles:
+.venv/bin/python scripts/select_sample.py --size 1500
 ```
+
+El script utiliza la semilla fija `20261109`, informa de la cobertura por
+estrato y de Metacritic, y se detiene si faltan elegibles o ya existe la
+muestra. Ejecuta solo una de las dos opciones anteriores.
 
 4. No modificar `final_sample.csv` después de fijarlo. Todas las fases
    posteriores (reseñas, clustering y análisis externo) usan esa muestra.
@@ -201,6 +206,13 @@ El JSONL es la copia de seguridad cara de obtener; los CSV se pueden
 regenerar en segundos sin volver a llamar a Steam.
 
 ## Pendiente
+
+El estado y las tareas específicas de cada modelo se mantienen por separado:
+
+- [Modelo A: metadatos](scripts/modelo_A/README.md).
+- [Modelo B: metadatos y texto](scripts/modelo_B/README.md).
+
+Tareas generales del proyecto:
 
 - Completar la descarga hasta tener el tamaño elegido (2.000; 1.500 si el
   tiempo aprieta).
