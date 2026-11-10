@@ -36,7 +36,9 @@ def age_band(age):
 
 
 with SUMMARY.open(encoding="utf-8") as f:
-    rows = list(csv.DictReader(f))
+    reader = csv.DictReader(f)
+    fieldnames = list(reader.fieldnames or [])
+    rows = list(reader)
 
 steps = [
     ("con datos", lambda r: True),
@@ -49,13 +51,18 @@ steps = [
 ]
 
 current = rows
-print(f"{'filtro':<28} {'quedan':>6} {'pasan':>6}")
+print(f"{'filtro':<28} {'quedan':>6} {'descartados':>11}")
 for label, predicate in steps:
     before = len(current)
     current = [r for r in current if predicate(r)]
-    print(f"{label:<28} {len(current):>6} {len(current) - before:>+6}")
+    print(f"{label:<28} {len(current):>6} {before - len(current):>11}")
 
-print(f"\naptos totales: {len(current)} de {len(rows)} ({len(current) / len(rows):.1%})")
+eligible_ratio = len(current) / len(rows) if rows else 0
+print(f"\naptos totales: {len(current)} de {len(rows)} ({eligible_ratio:.1%})")
+print("\nDataset final (muestra aleatoria, sin cuotas por estrato):")
+for target in (1500, 2000):
+    missing = max(0, target - len(current))
+    print(f"  objetivo {target}: faltan {missing} elegibles")
 
 counts = Counter()
 for r in current:
@@ -66,9 +73,8 @@ print(f"{'precio':<10}" + "".join(f"{band:>10}" for band in AGE_BANDS) + f"{'tot
 for price in PRICE_BANDS:
     values = [counts[(price, age)] for age in AGE_BANDS]
     print(f"{price:<10}" + "".join(f"{v:>10}" for v in values) + f"{sum(values):>10}")
-print(f"{'total':<10}" + "".join(f"{counts[(p, a)]:>10}" for a in AGE_BANDS for p in [""]) if False else "")
 
-print("\nCobertura por estrato (objetivo 30):")
+print("\nCobertura del piloto (objetivo 30 por estrato; solo informativo):")
 for price in PRICE_BANDS:
     for age in AGE_BANDS:
         count = counts[(price, age)]
@@ -97,7 +103,8 @@ for r in current:
 
 ELIGIBLE.parent.mkdir(parents=True, exist_ok=True)
 with ELIGIBLE.open("w", encoding="utf-8", newline="") as f:
-    writer = csv.DictWriter(f, fieldnames=list(current[0]))
+    output_fields = list(dict.fromkeys(fieldnames + ["price_band", "age_band", "stratum"]))
+    writer = csv.DictWriter(f, fieldnames=output_fields)
     writer.writeheader()
     writer.writerows(current)
 
