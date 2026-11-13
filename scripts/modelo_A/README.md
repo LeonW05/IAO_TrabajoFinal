@@ -9,7 +9,7 @@ se reservan para la validación externa.
 - [x] Definir las variables iniciales y su tratamiento.
 - [x] Crear `prepare_features.py`: extraer, codificar y escalar los metadatos
   de la muestra final.
-- [ ] Crear `cluster_metadata.py`: probar algoritmos y números de grupos.
+- [x] Crear `cluster_metadata.py`: probar algoritmos y números de grupos.
 - [ ] Evaluar silhouette, Davies-Bouldin y estabilidad entre semillas.
 - [ ] Guardar y describir los grupos para compararlos con el modelo B.
 
@@ -68,3 +68,40 @@ Después de fijar `data/interim/final_sample.csv`:
 Permite cambiar las rutas con `--sample`, `--raw-dir` y `--output-dir`, y la
 fecha con `--reference-date AAAA-MM-DD`. Los archivos de salida se sobrescriben
 al volver a ejecutarlo; la muestra y los JSONL originales no se modifican.
+
+## Script `cluster_metadata.py`
+
+Compara particiones; no vuelve a preparar variables ni toca la muestra:
+
+1. Lee `features.csv` y `preprocessing.json`. Exige las mismas columnas, en el
+   mismo orden, e ignora `appid` al ajustar los grupos.
+2. Prueba k-means (`n_init=10`, Lloyd) y clustering aglomerativo (enlace de
+   Ward) para k de 2 a 10. La distancia es la euclídea, coherente con el
+   escalado de precio y antigüedad.
+3. En cada combinación calcula silhouette y Davies-Bouldin. En k-means repite
+   el ajuste con cinco semillas (`20261109` y las cuatro siguientes) y resume
+   la estabilidad con el ARI medio entre parejas. Ward no usa semilla, así que
+   su estabilidad queda vacía.
+4. Elige la combinación con mayor silhouette. En un empate gana el menor
+   Davies-Bouldin, luego la mayor estabilidad y, por último, el menor k.
+5. Numera los grupos de mayor a menor tamaño y guarda, en el mismo directorio:
+   - `clustering_metrics.csv`: métricas de todas las combinaciones válidas.
+   - `cluster_assignments.csv`: `appid` y grupo del modelo elegido.
+   - `cluster_profiles.csv`: tamaño, peso, medias de precio y antigüedad,
+     proporción de plataformas y géneros y categorías más frecuentes.
+   - `clustering.json`: semillas, regla de selección y rutas.
+
+Una combinación se descarta si algún grupo tiene menos de dos juegos, porque
+silhouette y Davies-Bouldin no se pueden calcular. Hace falta `scikit-learn`.
+
+Las dos casillas de evaluación y descripción se cierran al ejecutarlo sobre
+`features.csv` de la muestra final. Volver a lanzarlo sobrescribe esas cuatro
+salidas; no modifica `features.csv` ni `preprocessing.json`.
+
+```bash
+.venv/bin/python scripts/modelo_A/cluster_metadata.py
+```
+
+`--features`, `--preprocessing` y `--output-dir` cambian las rutas. `--k-min`,
+`--k-max` y `--seeds` cambian la búsqueda. La primera semilla de `--seeds` es
+la que produce los grupos guardados.
