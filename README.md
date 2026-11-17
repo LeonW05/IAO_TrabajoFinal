@@ -23,7 +23,7 @@ final.
 - Dependencias del entorno virtual:
 
 ```bash
-.venv/bin/pip install requests beautifulsoup4 lxml python-dateutil python-dotenv numpy scikit-learn
+.venv/bin/pip install requests beautifulsoup4 lxml python-dateutil python-dotenv numpy scikit-learn joblib
 ```
 
 Estas dependencias se encuentran en `requirements.txt`. Para instalar:
@@ -191,7 +191,7 @@ Metacritic como comprobación de robustez.
 2. Comprobar que `data/interim/eligible_candidates.csv` tiene al menos el
 
    tamaño elegido (2.000; 1.500 si el tiempo aprieta). Si no, seguir
-        descargando `appdetails` por tandas.
+         descargando `appdetails` por tandas.
 3. Generar la muestra con semilla fija y guardarla en
 
    `data/interim/final_sample.csv`:

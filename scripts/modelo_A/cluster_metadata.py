@@ -1,41 +1,25 @@
-"""Prueba algoritmos y números de grupos sobre las variables del modelo A.
+"""Entrena y selecciona un modelo K-Means sobre las variables del modelo A.
 
-Lee features.csv y preprocessing.json, compara k-means y clustering
-aglomerativo, y guarda métricas, asignaciones y perfiles del modelo elegido.
-No modifica la muestra ni las variables de entrada.
+Lee features.csv y preprocessing.json, busca los mejores hiperparámetros
+mediante validación cruzada y exporta el modelo entrenado (.pkl) junto con
+sus métricas, asignaciones y perfiles para clasificar juegos nuevos.
 """
 
 import argparse
 import csv
 import json
 from pathlib import Path
+import numpy as np
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+from sklearn.model_selection import GridSearchCV
+import joblib
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DIR = PROJECT_ROOT / "data/processed/modelo_A"
 SEED = 20261109
-DEFAULT_SEEDS = tuple(SEED + offset for offset in range(5))
-ALGORITHMS = ("kmeans", "agglomerative")
 PROFILE_LIMIT = 5
-
-
-def load_estimators():
-    try:
-        import numpy as np
-        from sklearn.cluster import AgglomerativeClustering, KMeans
-        from sklearn.metrics import adjusted_rand_score, davies_bouldin_score, silhouette_score
-    except ImportError as error:
-        raise SystemExit(
-            "Faltan numpy o scikit-learn. Instálalos en el entorno con: "
-            "pip install numpy scikit-learn"
-        ) from error
-    return {
-        "np": np,
-        "KMeans": KMeans,
-        "AgglomerativeClustering": AgglomerativeClustering,
-        "adjusted_rand_score": adjusted_rand_score,
-        "davies_bouldin_score": davies_bouldin_score,
-        "silhouette_score": silhouette_score,
-    }
 
 
 def read_inputs(features_path, preprocessing_path):
@@ -75,54 +59,27 @@ def read_inputs(features_path, preprocessing_path):
     return appids, matrix, feature_columns, config
 
 
-def validate_matrix(np, matrix):
+def validate_matrix(matrix):
     values = np.asarray(matrix, dtype=float)
     if not np.isfinite(values).all():
         raise ValueError("Hay valores no finitos en las variables.")
     return values
 
+def grid_search_params(k_values):
+    return {
+        'n_clusters': k_values,
+        'n_init': [10, 20, 50],
+    }
 
-def fit_labels(tools, algorithm, matrix, k, seed):
-    if algorithm == "kmeans":
-        model = tools["KMeans"](n_clusters=k, n_init=10, random_state=seed, algorithm="lloyd")
-        return model.fit_predict(matrix)
-    if algorithm == "agglomerative":
-        model = tools["AgglomerativeClustering"](n_clusters=k, linkage="ward")
-        return model.fit_predict(matrix)
-    raise ValueError(f"Algoritmo desconocido: {algorithm}")
-
-
-def partition_metrics(tools, matrix, labels):
-    labels = tools["np"].asarray(labels)
-    counts = tools["np"].bincount(labels)
-    if counts.size < 2 or counts.min() < 2:
-        return None, None
-    silhouette = float(tools["silhouette_score"](matrix, labels, metric="euclidean"))
-    davies_bouldin = float(tools["davies_bouldin_score"](matrix, labels))
-    return silhouette, davies_bouldin
+def silhouette_scorer(estimator, X):
+    labels = estimator.predict(X)
+    n_labels = len(np.unique(labels))
+    if n_labels < 2 or n_labels >= len(X):
+        return -1.0
+    return silhouette_score(X, labels)
 
 
-def mean_pairwise_ari(tools, labelings):
-    score = tools["adjusted_rand_score"]
-    values = [
-        float(score(left, right))
-        for index, left in enumerate(labelings)
-        for right in labelings[index + 1:]
-    ]
-    return sum(values) / len(values) if values else None
-
-
-def inertia(np, matrix, labels):
-    labels = np.asarray(labels)
-    total = 0.0
-    for label in np.unique(labels):
-        points = matrix[labels == label]
-        center = points.mean(axis=0)
-        total += float(((points - center) ** 2).sum())
-    return total
-
-
-def relabel_by_size(appids, labels):
+def relabel_by_size(appids, labels, n_clusters):
     groups = {}
     for appid, label in zip(appids, labels):
         groups.setdefault(int(label), []).append(appid)
@@ -130,22 +87,10 @@ def relabel_by_size(appids, labels):
         groups,
         key=lambda label: (-len(groups[label]), min(int(appid) for appid in groups[label])),
     )
+    empty = [c for c in range(n_clusters) if c not in groups]
+    order = order + empty
     mapping = {old: new for new, old in enumerate(order)}
-    return [mapping[int(label)] for label in labels]
-
-
-def better(candidate, current):
-    if candidate["silhouette"] != current["silhouette"]:
-        return candidate["silhouette"] > current["silhouette"]
-    if candidate["davies_bouldin"] != current["davies_bouldin"]:
-        return candidate["davies_bouldin"] < current["davies_bouldin"]
-    candidate_stability = -1 if candidate["stability_ari"] is None else candidate["stability_ari"]
-    current_stability = -1 if current["stability_ari"] is None else current["stability_ari"]
-    if candidate_stability != current_stability:
-        return candidate_stability > current_stability
-    if candidate["k"] != current["k"]:
-        return candidate["k"] < current["k"]
-    return candidate["algorithm"] < current["algorithm"]
+    return [mapping[int(label)] for label in labels], order
 
 
 def column_indexes(feature_columns, prefix):
@@ -156,7 +101,7 @@ def column_indexes(feature_columns, prefix):
     ]
 
 
-def top_rates(np, points, indexed_columns, vocabulary):
+def top_rates(points, indexed_columns, vocabulary):
     ranked = []
     for index, identifier in indexed_columns:
         rate = float(points[:, index].mean())
@@ -168,11 +113,11 @@ def top_rates(np, points, indexed_columns, vocabulary):
     return "; ".join(f"{label} ({rate:.0%})" for rate, label in ranked[:PROFILE_LIMIT])
 
 
-def mean_column(np, points, feature_columns, name):
+def mean_column(points, feature_columns, name):
     return float(points[:, feature_columns.index(name)].mean())
 
 
-def build_profiles(np, matrix, labels, feature_columns, config):
+def build_profiles(matrix, labels, feature_columns, config, n_clusters):
     required = (
         "price_log1p_scaled", "age_years_scaled",
         "platform_windows", "platform_mac", "platform_linux",
@@ -185,60 +130,36 @@ def build_profiles(np, matrix, labels, feature_columns, config):
     categories = column_indexes(feature_columns, "categories_")
     profiles = []
     total = len(labels)
-    for cluster in range(max(labels) + 1):
+    for cluster in range(n_clusters):
         points = matrix[np.asarray(labels) == cluster]
         size = int(points.shape[0])
+        if size == 0:
+            profiles.append({
+                "cluster": cluster,
+                "size": 0,
+                "share": 0.0,
+                "mean_price_log1p_scaled": 0.0,
+                "mean_age_years_scaled": 0.0,
+                "rate_platform_windows": 0.0,
+                "rate_platform_mac": 0.0,
+                "rate_platform_linux": 0.0,
+                "top_genres": "",
+                "top_categories": "",
+            })
+            continue
         profiles.append({
             "cluster": cluster,
             "size": size,
             "share": size / total,
-            "mean_price_log1p_scaled": mean_column(np, points, feature_columns, "price_log1p_scaled"),
-            "mean_age_years_scaled": mean_column(np, points, feature_columns, "age_years_scaled"),
-            "rate_platform_windows": mean_column(np, points, feature_columns, "platform_windows"),
-            "rate_platform_mac": mean_column(np, points, feature_columns, "platform_mac"),
-            "rate_platform_linux": mean_column(np, points, feature_columns, "platform_linux"),
-            "top_genres": top_rates(np, points, genres, vocabularies.get("genres") or {}),
-            "top_categories": top_rates(np, points, categories, vocabularies.get("categories") or {}),
+            "mean_price_log1p_scaled": mean_column(points, feature_columns, "price_log1p_scaled"),
+            "mean_age_years_scaled": mean_column(points, feature_columns, "age_years_scaled"),
+            "rate_platform_windows": mean_column(points, feature_columns, "platform_windows"),
+            "rate_platform_mac": mean_column(points, feature_columns, "platform_mac"),
+            "rate_platform_linux": mean_column(points, feature_columns, "platform_linux"),
+            "top_genres": top_rates(points, genres, vocabularies.get("genres") or {}),
+            "top_categories": top_rates(points, categories, vocabularies.get("categories") or {}),
         })
     return profiles
-
-
-def search(tools, appids, matrix, k_values, seeds):
-    np = tools["np"]
-    reference_seed = seeds[0]
-    results = []
-    chosen_labels = {}
-    for algorithm in ALGORITHMS:
-        for k in k_values:
-            if algorithm == "agglomerative":
-                labelings = [fit_labels(tools, algorithm, matrix, k, reference_seed)]
-                stability = None
-            else:
-                labelings = [fit_labels(tools, algorithm, matrix, k, seed) for seed in seeds]
-                stability = mean_pairwise_ari(tools, labelings)
-            labels = relabel_by_size(appids, labelings[0])
-            silhouette, davies_bouldin = partition_metrics(tools, matrix, labels)
-            if silhouette is None:
-                continue
-            results.append({
-                "algorithm": algorithm,
-                "k": k,
-                "silhouette": silhouette,
-                "davies_bouldin": davies_bouldin,
-                "stability_ari": stability,
-                "inertia": inertia(np, matrix, labels),
-            })
-            chosen_labels[(algorithm, k)] = labels
-    if not results:
-        raise ValueError(
-            "Ninguna combinación produjo grupos con al menos dos juegos. "
-            "Amplía la muestra o reduce el rango de k."
-        )
-    selected = results[0]
-    for candidate in results[1:]:
-        if better(candidate, selected):
-            selected = candidate
-    return results, selected, chosen_labels[(selected["algorithm"], selected["k"])]
 
 
 def write_csv(path, fieldnames, rows):
@@ -253,26 +174,24 @@ def number(value):
 
 
 def save_outputs(output_dir, features_path, preprocessing_path, appids, results, selected,
-                 labels, profiles, k_values, seeds, n_features):
+                 labels, profiles, k_values, n_features, best_model, full_silhouette):
     output_dir.mkdir(parents=True, exist_ok=True)
     metrics_path = output_dir / "clustering_metrics.csv"
     assignments_path = output_dir / "cluster_assignments.csv"
     profiles_path = output_dir / "cluster_profiles.csv"
     summary_path = output_dir / "clustering.json"
+    model_path = output_dir / "modelo_A.pkl"
     metric_rows = []
     for row in results:
         metric_rows.append({
-            "algorithm": row["algorithm"],
             "k": row["k"],
+            "n_init": row["n_init"],
             "silhouette": number(row["silhouette"]),
-            "davies_bouldin": number(row["davies_bouldin"]),
-            "stability_ari": number(row["stability_ari"]),
-            "inertia": number(row["inertia"]),
             "selected": int(row is selected),
         })
     write_csv(
         metrics_path,
-        ["algorithm", "k", "silhouette", "davies_bouldin", "stability_ari", "inertia", "selected"],
+        ["k", "n_init", "silhouette", "selected"],
         metric_rows,
     )
     write_csv(
@@ -302,69 +221,34 @@ def save_outputs(output_dir, features_path, preprocessing_path, appids, results,
         "preprocessing_path": str(preprocessing_path.resolve()),
         "rows": len(appids),
         "n_features": n_features,
-        "algorithms": list(ALGORITHMS),
         "k_values": list(k_values),
-        "reference_seed": seeds[0],
-        "stability_seeds": list(seeds),
-        "kmeans": {"n_init": 10, "algorithm": "lloyd"},
-        "agglomerative": {"linkage": "ward", "stability_ari": None},
-        "metric": "euclidean",
-        "selection_rule": (
-            "Mayor silhouette; empate: menor Davies-Bouldin, luego mayor "
-            "ARI medio entre semillas, luego menor k."
-        ),
-        "stability_note": (
-            "El ARI medio solo se calcula en k-means. El aglomerativo Ward "
-            "no usa semilla; su estabilidad queda vacía."
-        ),
         "selected": {
-            "algorithm": selected["algorithm"],
+            "n_init": selected["n_init"],
             "k": selected["k"],
-            "silhouette": selected["silhouette"],
-            "davies_bouldin": selected["davies_bouldin"],
-            "stability_ari": selected["stability_ari"],
-            "inertia": selected["inertia"],
+            "cv_silhouette": selected["silhouette"],
+            "full_silhouette": full_silhouette,
         },
         "outputs": {
             "metrics": str(metrics_path.resolve()),
             "assignments": str(assignments_path.resolve()),
             "profiles": str(profiles_path.resolve()),
+            "model": str(model_path.resolve()),
         },
         "excluded_from_fit": ["appid", "name", "metacritic", "reviews", "SteamSpy", "stratum"],
     }
     with summary_path.open("w", encoding="utf-8") as f:
         json.dump(summary, f, ensure_ascii=False, indent=2)
         f.write("\n")
-    return metrics_path, assignments_path, profiles_path
+    joblib.dump(best_model, model_path)
+    return metrics_path, assignments_path, profiles_path, model_path
 
 
 def print_report(results, selected, output_dir):
-    print(f"{'algoritmo':<16} {'k':>3} {'silhouette':>12} {'davies_bouldin':>16} {'estabilidad':>13}")
+    print(f"{'k':>3} {'n_init':>6} {'silhouette':>12}")
     for row in results:
-        stability = "—" if row["stability_ari"] is None else f"{row['stability_ari']:.3f}"
-        print(
-            f"{row['algorithm']:<16} {row['k']:>3} {row['silhouette']:>12.3f} "
-            f"{row['davies_bouldin']:>16.3f} {stability:>13}"
-        )
-    stability = "—" if selected["stability_ari"] is None else f"{selected['stability_ari']:.3f}"
-    print(
-        f"\nSeleccionado: {selected['algorithm']}, k={selected['k']}, "
-        f"silhouette={selected['silhouette']:.3f}, "
-        f"davies_bouldin={selected['davies_bouldin']:.3f}, estabilidad={stability}"
-    )
-    print(f"Resultados: {output_dir.resolve()}")
-
-
-def parse_seeds(text):
-    seeds = []
-    for piece in text.split(","):
-        piece = piece.strip()
-        if not piece.isdecimal():
-            raise ValueError("Las semillas deben ser enteros separados por comas.")
-        seeds.append(int(piece))
-    if len(seeds) < 2 or len(set(seeds)) != len(seeds):
-        raise ValueError("Hacen falta al menos dos semillas distintas para medir la estabilidad.")
-    return tuple(seeds)
+        print(f"{row['k']:>3} {row['n_init']:>6} {row['silhouette']:>12.3f}")
+    print(f"\nSeleccionado: k={selected['k']}, n_init={selected['n_init']}, silhouette={selected['silhouette']:.3f}")
+    print(f"Resultados en {output_dir.resolve()}")
 
 
 def main():
@@ -372,28 +256,59 @@ def main():
     parser.add_argument("--features", type=Path, default=DEFAULT_DIR / "features.csv")
     parser.add_argument("--preprocessing", type=Path, default=DEFAULT_DIR / "preprocessing.json")
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_DIR)
-    parser.add_argument("--k-min", type=int, default=2)
-    parser.add_argument("--k-max", type=int, default=10)
-    parser.add_argument("--seeds", default=",".join(str(seed) for seed in DEFAULT_SEEDS),
-                        help="Semillas de k-means separadas por comas. La primera es la de referencia.")
+    parser.add_argument("--k-min", type=int, default=4)
+    parser.add_argument("--k-max", type=int, default=12)
+
     args = parser.parse_args()
     try:
         if args.k_min < 2 or args.k_max < args.k_min:
             raise ValueError("El rango de grupos debe cumplir 2 <= k-min <= k-max.")
-        seeds = parse_seeds(args.seeds)
         appids, raw_matrix, feature_columns, config = read_inputs(args.features, args.preprocessing)
         if args.k_max >= len(appids):
             raise ValueError(
                 f"k-max={args.k_max} no cabe en una muestra de {len(appids)} juegos."
             )
-        tools = load_estimators()
-        matrix = validate_matrix(tools["np"], raw_matrix)
-        k_values = range(args.k_min, args.k_max + 1)
-        results, selected, labels = search(tools, appids, matrix, k_values, seeds)
-        profiles = build_profiles(tools["np"], matrix, labels, feature_columns, config)
+        matrix = validate_matrix(raw_matrix)
+        k_values = range(args.k_min, args.k_max+1)
+        param_grid = grid_search_params(k_values)
+        grid_search = GridSearchCV(
+            estimator = KMeans(random_state=SEED),
+            param_grid = param_grid,
+            scoring = silhouette_scorer,
+            n_jobs = -1,
+            verbose = 3
+        )
+
+        grid_search.fit(matrix)
+
+        print(f"Mejores parámetros: {grid_search.best_params_}")
+        print(f"Mejor puntuación: {grid_search.best_score_:.3f}")
+
+        best_model = grid_search.best_estimator_
+        clusters = best_model.predict(matrix)
+
+        results = []
+        for params, score in zip(
+            grid_search.cv_results_['params'],
+            grid_search.cv_results_['mean_test_score'],
+        ):
+            results.append({
+                "k": params['n_clusters'],
+                "n_init": params['n_init'],
+                "silhouette": float(score),
+            })
+        
+        selected = results[grid_search.best_index_]
+        labels, cluster_order = relabel_by_size(appids, clusters, best_model.n_clusters)
+        best_model.cluster_centers_ = best_model.cluster_centers_[cluster_order]
+        best_model.labels_ = np.asarray(labels, dtype=np.int32)
+        full_silhouette = float(silhouette_score(matrix, labels))
+        
+
+        profiles = build_profiles(matrix, labels, feature_columns, config, best_model.n_clusters)
         save_outputs(
             args.output_dir, args.features, args.preprocessing, appids, results, selected,
-            labels, profiles, k_values, seeds, len(feature_columns),
+            labels, profiles, k_values, len(feature_columns), best_model, full_silhouette
         )
     except (OSError, ValueError) as error:
         parser.exit(1, f"Error: {error}\n")
