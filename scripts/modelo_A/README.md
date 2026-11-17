@@ -37,15 +37,17 @@ Metacritic ni SteamSpy.
 Prepara la tabla numérica; todavía no entrena ni asigna grupos:
 
 1. Lee `data/interim/final_sample.csv`, comprueba que no esté vacío ni tenga
+
    identificadores inválidos o duplicados y ordena los juegos por `appid`.
 2. Busca sus metadatos en `data/raw/appdetails_candidates*.jsonl`. Si un
+
    identificador se repite, conserva el último registro leído, igual que el
-   script de resumen.
+    script de resumen.
 3. Valida los datos y aplica las transformaciones de la tabla anterior.
 4. Guarda los resultados en `data/processed/modelo_A/`:
    - `features.csv`: una fila por juego, con `appid` y las variables numéricas.
    - `preprocessing.json`: columnas, etiquetas de géneros y categorías,
-     medias, desviaciones, fecha de referencia y reglas aplicadas.
+   medias, desviaciones, fecha de referencia y reglas aplicadas.
 
 Se detiene si faltan metadatos, precio válido, fecha, géneros o indicadores
 de plataformas. No elimina juegos silenciosamente ni rellena esos datos.
@@ -74,25 +76,29 @@ al volver a ejecutarlo; la muestra y los JSONL originales no se modifican.
 Compara particiones; no vuelve a preparar variables ni toca la muestra:
 
 1. Lee `features.csv` y `preprocessing.json`. Exige las mismas columnas, en el
+
    mismo orden, e ignora `appid` al ajustar los grupos.
 2. Prueba k-means (`n_init=10`, Lloyd) y clustering aglomerativo (enlace de
+
    Ward) para k de 2 a 10. La distancia es la euclídea, coherente con el
-   escalado de precio y antigüedad.
+    escalado de precio y antigüedad.
 3. En cada combinación calcula silhouette y Davies-Bouldin. En k-means repite
+
    el ajuste con cinco semillas (`20261109` y las cuatro siguientes) y resume
-   la estabilidad con el ARI medio entre parejas. Ward no usa semilla, así que
-   su estabilidad queda vacía.
+    la estabilidad con el ARI medio entre parejas. Ward no usa semilla, así que
+    su estabilidad queda vacía.
 4. Elige la combinación con mayor silhouette. En un empate gana el menor
+
    Davies-Bouldin, luego la mayor estabilidad y, por último, el menor k.
 5. Numera los grupos de mayor a menor tamaño y guarda, en el mismo directorio:
    - `clustering_metrics.csv`: métricas de todas las combinaciones válidas.
    - `cluster_assignments.csv`: `appid` y grupo del modelo elegido.
    - `cluster_profiles.csv`: tamaño, peso, medias de precio y antigüedad,
-     proporción de plataformas y géneros y categorías más frecuentes.
+   proporción de plataformas y géneros y categorías más frecuentes.
    - `clustering.json`: semillas, regla de selección y rutas.
 
 Una combinación se descarta si algún grupo tiene menos de dos juegos, porque
-silhouette y Davies-Bouldin no se pueden calcular. Hace falta `scikit-learn`.
+silhouette y Davies-Bouldin no se pueden calcular.
 
 Las dos casillas de evaluación y descripción se cierran al ejecutarlo sobre
 `features.csv` de la muestra final. Volver a lanzarlo sobrescribe esas cuatro

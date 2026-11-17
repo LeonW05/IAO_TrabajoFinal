@@ -26,6 +26,20 @@ final.
 .venv/bin/pip install requests beautifulsoup4 lxml python-dateutil python-dotenv numpy scikit-learn
 ```
 
+Estas dependencias se encuentran en `requirements.txt`. Para instalar:
+
+- Windows:
+
+```bash
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
+- macOS / Linux:
+
+```bash
+.venv/bin/python -m pip install -r requirements.txt
+```
+
 ## Configuración
 
 1. Copia la plantilla y rellena la clave:
@@ -177,7 +191,7 @@ Metacritic como comprobación de robustez.
 2. Comprobar que `data/interim/eligible_candidates.csv` tiene al menos el
 
    tamaño elegido (2.000; 1.500 si el tiempo aprieta). Si no, seguir
-    descargando `appdetails` por tandas.
+        descargando `appdetails` por tandas.
 3. Generar la muestra con semilla fija y guardarla en
 
    `data/interim/final_sample.csv`:
