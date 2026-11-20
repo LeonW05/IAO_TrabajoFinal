@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 import numpy as np
 from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score
+from sklearn.metrics import davies_bouldin_score, silhouette_score
 from sklearn.model_selection import GridSearchCV
 import joblib
 
@@ -77,6 +77,15 @@ def silhouette_scorer(estimator, X):
     if n_labels < 2 or n_labels >= len(X):
         return -1.0
     return silhouette_score(X, labels)
+
+
+def davies_bouldin_scorer(estimator, X):
+    labels = estimator.predict(X)
+    n_labels = len(np.unique(labels))
+    if n_labels < 2 or n_labels >= len(X):
+        return -np.inf
+    score = davies_bouldin_score(X, labels)
+    return -score if np.isfinite(score) else -np.inf
 
 
 def relabel_by_size(appids, labels, n_clusters):
@@ -174,7 +183,8 @@ def number(value):
 
 
 def save_outputs(output_dir, features_path, preprocessing_path, appids, results, selected,
-                 labels, profiles, k_values, n_features, best_model, full_silhouette):
+                 labels, profiles, k_values, n_features, best_model,
+                 full_silhouette, full_davies_bouldin):
     output_dir.mkdir(parents=True, exist_ok=True)
     metrics_path = output_dir / "clustering_metrics.csv"
     assignments_path = output_dir / "cluster_assignments.csv"
@@ -187,11 +197,12 @@ def save_outputs(output_dir, features_path, preprocessing_path, appids, results,
             "k": row["k"],
             "n_init": row["n_init"],
             "silhouette": number(row["silhouette"]),
+            "davies_bouldin": number(row["davies_bouldin"]),
             "selected": int(row is selected),
         })
     write_csv(
         metrics_path,
-        ["k", "n_init", "silhouette", "selected"],
+        ["k", "n_init", "silhouette", "davies_bouldin", "selected"],
         metric_rows,
     )
     write_csv(
@@ -226,7 +237,9 @@ def save_outputs(output_dir, features_path, preprocessing_path, appids, results,
             "n_init": selected["n_init"],
             "k": selected["k"],
             "cv_silhouette": selected["silhouette"],
+            "cv_davies_bouldin": selected["davies_bouldin"],
             "full_silhouette": full_silhouette,
+            "full_davies_bouldin": full_davies_bouldin,
         },
         "outputs": {
             "metrics": str(metrics_path.resolve()),
@@ -244,10 +257,18 @@ def save_outputs(output_dir, features_path, preprocessing_path, appids, results,
 
 
 def print_report(results, selected, output_dir):
-    print(f"{'k':>3} {'n_init':>6} {'silhouette':>12}")
+    print(f"{'k':>3} {'n_init':>6} {'silhouette':>12} {'davies_bouldin':>15}")
     for row in results:
-        print(f"{row['k']:>3} {row['n_init']:>6} {row['silhouette']:>12.3f}")
-    print(f"\nSeleccionado: k={selected['k']}, n_init={selected['n_init']}, silhouette={selected['silhouette']:.3f}")
+        db = "—" if row["davies_bouldin"] is None else f"{row['davies_bouldin']:.3f}"
+        print(
+            f"{row['k']:>3} {row['n_init']:>6} "
+            f"{row['silhouette']:>12.3f} {db:>15}"
+        )
+    db = "—" if selected["davies_bouldin"] is None else f"{selected['davies_bouldin']:.3f}"
+    print(
+        f"\nSeleccionado: k={selected['k']}, n_init={selected['n_init']}, "
+        f"silhouette={selected['silhouette']:.3f}, davies_bouldin={db}"
+    )
     print(f"Resultados en {output_dir.resolve()}")
 
 
@@ -272,11 +293,15 @@ def main():
         k_values = range(args.k_min, args.k_max+1)
         param_grid = grid_search_params(k_values)
         grid_search = GridSearchCV(
-            estimator = KMeans(random_state=SEED),
-            param_grid = param_grid,
-            scoring = silhouette_scorer,
-            n_jobs = -1,
-            verbose = 3
+            estimator=KMeans(random_state=SEED),
+            param_grid=param_grid,
+            scoring={
+                "silhouette": silhouette_scorer,
+                "davies_bouldin": davies_bouldin_scorer,
+            },
+            refit="silhouette",
+            n_jobs=-1,
+            verbose=3
         )
 
         grid_search.fit(matrix)
@@ -288,14 +313,15 @@ def main():
         clusters = best_model.predict(matrix)
 
         results = []
-        for params, score in zip(
-            grid_search.cv_results_['params'],
-            grid_search.cv_results_['mean_test_score'],
-        ):
+        for index, params in enumerate(grid_search.cv_results_["params"]):
+            db = -float(grid_search.cv_results_["mean_test_davies_bouldin"][index])
             results.append({
-                "k": params['n_clusters'],
-                "n_init": params['n_init'],
-                "silhouette": float(score),
+                "k": params["n_clusters"],
+                "n_init": params["n_init"],
+                "silhouette": float(
+                    grid_search.cv_results_["mean_test_silhouette"][index]
+                ),
+                "davies_bouldin": db if np.isfinite(db) else None,
             })
         
         selected = results[grid_search.best_index_]
@@ -303,12 +329,14 @@ def main():
         best_model.cluster_centers_ = best_model.cluster_centers_[cluster_order]
         best_model.labels_ = np.asarray(labels, dtype=np.int32)
         full_silhouette = float(silhouette_score(matrix, labels))
+        full_davies_bouldin = float(davies_bouldin_score(matrix, labels))
         
 
         profiles = build_profiles(matrix, labels, feature_columns, config, best_model.n_clusters)
         save_outputs(
             args.output_dir, args.features, args.preprocessing, appids, results, selected,
-            labels, profiles, k_values, len(feature_columns), best_model, full_silhouette
+            labels, profiles, k_values, len(feature_columns), best_model,
+            full_silhouette, full_davies_bouldin
         )
     except (OSError, ValueError) as error:
         parser.exit(1, f"Error: {error}\n")
