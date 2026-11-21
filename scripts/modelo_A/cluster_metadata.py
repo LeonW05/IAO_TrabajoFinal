@@ -1,8 +1,8 @@
-"""Entrena y selecciona un modelo K-Means sobre las variables del modelo A.
+"""Compara números de grupos del modelo A y guarda el mejor K-Means.
 
-Lee features.csv y preprocessing.json, busca los mejores hiperparámetros
-mediante validación cruzada y exporta el modelo entrenado (.pkl) junto con
-sus métricas, asignaciones y perfiles para clasificar juegos nuevos.
+Lee features.csv y preprocessing.json, prueba K-Means para k=2..10,
+calcula silhouette y Davies-Bouldin sobre la partición completa y exporta
+el modelo entrenado (.pkl) junto con sus métricas, asignaciones y perfiles.
 """
 
 import argparse
@@ -12,7 +12,6 @@ from pathlib import Path
 import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.metrics import davies_bouldin_score, silhouette_score
-from sklearn.model_selection import GridSearchCV
 import joblib
 
 
@@ -64,29 +63,6 @@ def validate_matrix(matrix):
     if not np.isfinite(values).all():
         raise ValueError("Hay valores no finitos en las variables.")
     return values
-
-def grid_search_params(k_values):
-    return {
-        'n_clusters': k_values,
-        'n_init': [10, 20, 50],
-    }
-
-def silhouette_scorer(estimator, X):
-    labels = estimator.predict(X)
-    n_labels = len(np.unique(labels))
-    if n_labels < 2 or n_labels >= len(X):
-        return -1.0
-    return silhouette_score(X, labels)
-
-
-def davies_bouldin_scorer(estimator, X):
-    labels = estimator.predict(X)
-    n_labels = len(np.unique(labels))
-    if n_labels < 2 or n_labels >= len(X):
-        return -np.inf
-    score = davies_bouldin_score(X, labels)
-    return -score if np.isfinite(score) else -np.inf
-
 
 def select_best(results):
     """Mayor silhouette; en empate, menor Davies-Bouldin."""
@@ -196,8 +172,7 @@ def number(value):
 
 
 def save_outputs(output_dir, features_path, preprocessing_path, appids, results, selected,
-                 labels, profiles, k_values, n_features, best_model,
-                 full_silhouette, full_davies_bouldin):
+                 labels, profiles, k_values, n_features, best_model):
     output_dir.mkdir(parents=True, exist_ok=True)
     metrics_path = output_dir / "clustering_metrics.csv"
     assignments_path = output_dir / "cluster_assignments.csv"
@@ -249,11 +224,10 @@ def save_outputs(output_dir, features_path, preprocessing_path, appids, results,
         "selected": {
             "n_init": selected["n_init"],
             "k": selected["k"],
-            "cv_silhouette": selected["silhouette"],
-            "cv_davies_bouldin": selected["davies_bouldin"],
-            "full_silhouette": full_silhouette,
-            "full_davies_bouldin": full_davies_bouldin,
+            "silhouette": selected["silhouette"],
+            "davies_bouldin": selected["davies_bouldin"],
         },
+        "metric_scope": "partición completa",
         "outputs": {
             "metrics": str(metrics_path.resolve()),
             "assignments": str(assignments_path.resolve()),
@@ -290,8 +264,8 @@ def main():
     parser.add_argument("--features", type=Path, default=DEFAULT_DIR / "features.csv")
     parser.add_argument("--preprocessing", type=Path, default=DEFAULT_DIR / "preprocessing.json")
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_DIR)
-    parser.add_argument("--k-min", type=int, default=4)
-    parser.add_argument("--k-max", type=int, default=12)
+    parser.add_argument("--k-min", type=int, default=2)
+    parser.add_argument("--k-max", type=int, default=10)
 
     args = parser.parse_args()
     try:
@@ -303,54 +277,44 @@ def main():
                 f"k-max={args.k_max} no cabe en una muestra de {len(appids)} juegos."
             )
         matrix = validate_matrix(raw_matrix)
-        k_values = range(args.k_min, args.k_max+1)
-        param_grid = grid_search_params(k_values)
-        grid_search = GridSearchCV(
-            estimator=KMeans(random_state=SEED),
-            param_grid=param_grid,
-            scoring={
-                "silhouette": silhouette_scorer,
-                "davies_bouldin": davies_bouldin_scorer,
-            },
-            refit=False,
-            n_jobs=-1,
-            verbose=3
-        )
-
-        grid_search.fit(matrix)
-
+        k_values = range(args.k_min, args.k_max + 1)
         results = []
-        for index, params in enumerate(grid_search.cv_results_["params"]):
-            db = -float(grid_search.cv_results_["mean_test_davies_bouldin"][index])
+        models = {}
+        for k in k_values:
+            model = KMeans(
+                n_clusters=k,
+                n_init=10,
+                random_state=SEED,
+                algorithm="lloyd",
+            ).fit(matrix)
+            labels_k, _ = relabel_by_size(appids, model.labels_, k)
+            counts = np.bincount(labels_k)
+            if counts.size < 2 or counts.min() < 2:
+                continue
             results.append({
-                "k": params["n_clusters"],
-                "n_init": params["n_init"],
-                "silhouette": float(
-                    grid_search.cv_results_["mean_test_silhouette"][index]
-                ),
-                "davies_bouldin": db if np.isfinite(db) else None,
+                "k": k,
+                "n_init": 10,
+                "silhouette": float(silhouette_score(matrix, labels_k)),
+                "davies_bouldin": float(davies_bouldin_score(matrix, labels_k)),
             })
-        
+            models[k] = model
+        if not results:
+            raise ValueError(
+                "Ninguna combinación produjo grupos con al menos dos juegos. "
+                "Reduce k-max o revisa la muestra."
+            )
         selected = select_best(results)
-        best_model = KMeans(
-            n_clusters=selected["k"],
-            n_init=selected["n_init"],
-            random_state=SEED,
-            algorithm="lloyd",
-        ).fit(matrix)
-        clusters = best_model.labels_
-        labels, cluster_order = relabel_by_size(appids, clusters, best_model.n_clusters)
+        best_model = models[selected["k"]]
+        labels, cluster_order = relabel_by_size(
+            appids, best_model.labels_, best_model.n_clusters
+        )
         best_model.cluster_centers_ = best_model.cluster_centers_[cluster_order]
         best_model.labels_ = np.asarray(labels, dtype=np.int32)
-        full_silhouette = float(silhouette_score(matrix, labels))
-        full_davies_bouldin = float(davies_bouldin_score(matrix, labels))
-        
 
         profiles = build_profiles(matrix, labels, feature_columns, config, best_model.n_clusters)
         save_outputs(
             args.output_dir, args.features, args.preprocessing, appids, results, selected,
             labels, profiles, k_values, len(feature_columns), best_model,
-            full_silhouette, full_davies_bouldin
         )
     except (OSError, ValueError) as error:
         parser.exit(1, f"Error: {error}\n")
