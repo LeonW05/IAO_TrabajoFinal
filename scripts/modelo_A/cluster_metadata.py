@@ -1,23 +1,26 @@
-"""Compara números de grupos del modelo A y guarda el mejor K-Means.
+"""Compara K-Means y Ward para distintos números de grupos en el modelo A.
 
-Lee features.csv y preprocessing.json, prueba K-Means para k=2..10,
+Lee features.csv y preprocessing.json, prueba ambos algoritmos para k=2..10,
 calcula silhouette y Davies-Bouldin sobre la partición completa y exporta
-el modelo entrenado (.pkl) junto con sus métricas, asignaciones y perfiles.
+el modelo elegido (.pkl) junto con sus métricas, asignaciones y perfiles.
+Solo K-Means permite predecir juegos nuevos.
 """
 
 import argparse
 import csv
 import json
 from pathlib import Path
-import numpy as np
-from sklearn.cluster import KMeans
-from sklearn.metrics import davies_bouldin_score, silhouette_score
+
 import joblib
+import numpy as np
+from sklearn.cluster import AgglomerativeClustering, KMeans
+from sklearn.metrics import davies_bouldin_score, silhouette_score
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DIR = PROJECT_ROOT / "data/processed/modelo_A"
 SEED = 20261109
+ALGORITHMS = ("kmeans", "agglomerative")
 PROFILE_LIMIT = 5
 
 
@@ -64,6 +67,26 @@ def validate_matrix(matrix):
         raise ValueError("Hay valores no finitos en las variables.")
     return values
 
+
+def fit_model(algorithm, matrix, k):
+    if algorithm == "kmeans":
+        model = KMeans(
+            n_clusters=k,
+            n_init=10,
+            random_state=SEED,
+            algorithm="lloyd",
+        )
+    elif algorithm == "agglomerative":
+        model = AgglomerativeClustering(
+            n_clusters=k,
+            linkage="ward",
+            metric="euclidean",
+        )
+    else:
+        raise ValueError(f"Algoritmo desconocido: {algorithm}")
+    return model.fit(matrix)
+
+
 def select_best(results):
     """Mayor silhouette; en empate, menor Davies-Bouldin."""
     def key(row):
@@ -72,7 +95,7 @@ def select_best(results):
             -row["silhouette"],
             float("inf") if db is None else db,
             row["k"],
-            row["n_init"],
+            row["algorithm"],
         )
     return min(results, key=key)
 
@@ -182,6 +205,7 @@ def save_outputs(output_dir, features_path, preprocessing_path, appids, results,
     metric_rows = []
     for row in results:
         metric_rows.append({
+            "algorithm": row["algorithm"],
             "k": row["k"],
             "n_init": row["n_init"],
             "silhouette": number(row["silhouette"]),
@@ -190,7 +214,7 @@ def save_outputs(output_dir, features_path, preprocessing_path, appids, results,
         })
     write_csv(
         metrics_path,
-        ["k", "n_init", "silhouette", "davies_bouldin", "selected"],
+        ["algorithm", "k", "n_init", "silhouette", "davies_bouldin", "selected"],
         metric_rows,
     )
     write_csv(
@@ -222,6 +246,7 @@ def save_outputs(output_dir, features_path, preprocessing_path, appids, results,
         "n_features": n_features,
         "k_values": list(k_values),
         "selected": {
+            "algorithm": selected["algorithm"],
             "n_init": selected["n_init"],
             "k": selected["k"],
             "silhouette": selected["silhouette"],
@@ -232,30 +257,36 @@ def save_outputs(output_dir, features_path, preprocessing_path, appids, results,
             "metrics": str(metrics_path.resolve()),
             "assignments": str(assignments_path.resolve()),
             "profiles": str(profiles_path.resolve()),
-            "model": str(model_path.resolve()),
+            "model": str(model_path.resolve()) if best_model is not None else None,
         },
         "excluded_from_fit": ["appid", "name", "metacritic", "reviews", "SteamSpy", "stratum"],
     }
     with summary_path.open("w", encoding="utf-8") as f:
         json.dump(summary, f, ensure_ascii=False, indent=2)
         f.write("\n")
-    joblib.dump(best_model, model_path)
-    return metrics_path, assignments_path, profiles_path, model_path
+    if best_model is not None:
+        joblib.dump(best_model, model_path)
+    elif model_path.exists():
+        model_path.unlink()
+    return metrics_path, assignments_path, profiles_path, model_path if best_model is not None else None
 
 
 def print_report(results, selected, output_dir):
-    print(f"{'k':>3} {'n_init':>6} {'silhouette':>12} {'davies_bouldin':>15}")
+    print(f"{'algoritmo':>14} {'k':>3} {'n_init':>6} {'silhouette':>12} {'davies_bouldin':>15}")
     for row in results:
         db = "—" if row["davies_bouldin"] is None else f"{row['davies_bouldin']:.3f}"
         print(
-            f"{row['k']:>3} {row['n_init']:>6} "
+            f"{row['algorithm']:>14} {row['k']:>3} {row['n_init']:>6} "
             f"{row['silhouette']:>12.3f} {db:>15}"
         )
     db = "—" if selected["davies_bouldin"] is None else f"{selected['davies_bouldin']:.3f}"
     print(
-        f"\nSeleccionado: k={selected['k']}, n_init={selected['n_init']}, "
-        f"silhouette={selected['silhouette']:.3f}, davies_bouldin={db}"
+        f"\nSeleccionado: algoritmo={selected['algorithm']}, k={selected['k']}, "
+        f"n_init={selected['n_init']}, silhouette={selected['silhouette']:.3f}, "
+        f"davies_bouldin={db}"
     )
+    if selected["algorithm"] == "agglomerative":
+        print("Ward no genera un modelo predictivo .pkl.")
     print(f"Resultados en {output_dir.resolve()}")
 
 
@@ -280,38 +311,47 @@ def main():
         k_values = range(args.k_min, args.k_max + 1)
         results = []
         models = {}
-        for k in k_values:
-            model = KMeans(
-                n_clusters=k,
-                n_init=10,
-                random_state=SEED,
-                algorithm="lloyd",
-            ).fit(matrix)
-            labels_k, _ = relabel_by_size(appids, model.labels_, k)
-            counts = np.bincount(labels_k)
-            if counts.size < 2 or counts.min() < 2:
-                continue
-            results.append({
-                "k": k,
-                "n_init": 10,
-                "silhouette": float(silhouette_score(matrix, labels_k)),
-                "davies_bouldin": float(davies_bouldin_score(matrix, labels_k)),
-            })
-            models[k] = model
+        labels_by_configuration = {}
+        for algorithm in ALGORITHMS:
+            for k in k_values:
+                model = fit_model(algorithm, matrix, k)
+                labels_k, cluster_order = relabel_by_size(appids, model.labels_, k)
+                counts = np.bincount(labels_k)
+                if counts.size < 2 or counts.min() < 2:
+                    continue
+                results.append({
+                    "algorithm": algorithm,
+                    "k": k,
+                    "n_init": 10 if algorithm == "kmeans" else None,
+                    "silhouette": float(silhouette_score(matrix, labels_k)),
+                    "davies_bouldin": float(davies_bouldin_score(matrix, labels_k)),
+                })
+                key = (algorithm, k)
+                labels_by_configuration[key] = labels_k
+                if algorithm == "kmeans":
+                    models[key] = model
         if not results:
             raise ValueError(
                 "Ninguna combinación produjo grupos con al menos dos juegos. "
                 "Reduce k-max o revisa la muestra."
             )
         selected = select_best(results)
-        best_model = models[selected["k"]]
-        labels, cluster_order = relabel_by_size(
-            appids, best_model.labels_, best_model.n_clusters
-        )
-        best_model.cluster_centers_ = best_model.cluster_centers_[cluster_order]
-        best_model.labels_ = np.asarray(labels, dtype=np.int32)
+        selected_key = (selected["algorithm"], selected["k"])
+        labels = labels_by_configuration[selected_key]
+        best_model = models.get(selected_key)
+        if best_model is not None:
+            cluster_order = sorted(
+                range(best_model.n_clusters),
+                key=lambda cluster: (
+                    -int(np.sum(best_model.labels_ == cluster)),
+                    min(int(appid) for appid, label in zip(appids, best_model.labels_)
+                        if label == cluster),
+                ),
+            )
+            best_model.cluster_centers_ = best_model.cluster_centers_[cluster_order]
+            best_model.labels_ = np.asarray(labels, dtype=np.int32)
 
-        profiles = build_profiles(matrix, labels, feature_columns, config, best_model.n_clusters)
+        profiles = build_profiles(matrix, labels, feature_columns, config, selected["k"])
         save_outputs(
             args.output_dir, args.features, args.preprocessing, appids, results, selected,
             labels, profiles, k_values, len(feature_columns), best_model,
