@@ -88,6 +88,19 @@ def davies_bouldin_scorer(estimator, X):
     return -score if np.isfinite(score) else -np.inf
 
 
+def select_best(results):
+    """Mayor silhouette; en empate, menor Davies-Bouldin."""
+    def key(row):
+        db = row["davies_bouldin"]
+        return (
+            -row["silhouette"],
+            float("inf") if db is None else db,
+            row["k"],
+            row["n_init"],
+        )
+    return min(results, key=key)
+
+
 def relabel_by_size(appids, labels, n_clusters):
     groups = {}
     for appid, label in zip(appids, labels):
@@ -299,18 +312,12 @@ def main():
                 "silhouette": silhouette_scorer,
                 "davies_bouldin": davies_bouldin_scorer,
             },
-            refit="silhouette",
+            refit=False,
             n_jobs=-1,
             verbose=3
         )
 
         grid_search.fit(matrix)
-
-        print(f"Mejores parámetros: {grid_search.best_params_}")
-        print(f"Mejor puntuación: {grid_search.best_score_:.3f}")
-
-        best_model = grid_search.best_estimator_
-        clusters = best_model.predict(matrix)
 
         results = []
         for index, params in enumerate(grid_search.cv_results_["params"]):
@@ -324,7 +331,14 @@ def main():
                 "davies_bouldin": db if np.isfinite(db) else None,
             })
         
-        selected = results[grid_search.best_index_]
+        selected = select_best(results)
+        best_model = KMeans(
+            n_clusters=selected["k"],
+            n_init=selected["n_init"],
+            random_state=SEED,
+            algorithm="lloyd",
+        ).fit(matrix)
+        clusters = best_model.labels_
         labels, cluster_order = relabel_by_size(appids, clusters, best_model.n_clusters)
         best_model.cluster_centers_ = best_model.cluster_centers_[cluster_order]
         best_model.labels_ = np.asarray(labels, dtype=np.int32)
