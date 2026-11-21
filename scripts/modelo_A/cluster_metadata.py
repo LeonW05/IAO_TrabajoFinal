@@ -14,7 +14,7 @@ from pathlib import Path
 import joblib
 import numpy as np
 from sklearn.cluster import AgglomerativeClustering, KMeans
-from sklearn.metrics import davies_bouldin_score, silhouette_score
+from sklearn.metrics import adjusted_rand_score, davies_bouldin_score, silhouette_score
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -68,12 +68,12 @@ def validate_matrix(matrix):
     return values
 
 
-def fit_model(algorithm, matrix, k):
+def fit_model(algorithm, matrix, k, seed=SEED):
     if algorithm == "kmeans":
         model = KMeans(
             n_clusters=k,
             n_init=10,
-            random_state=SEED,
+            random_state=seed,
             algorithm="lloyd",
         )
     elif algorithm == "agglomerative":
@@ -195,7 +195,7 @@ def number(value):
 
 
 def save_outputs(output_dir, features_path, preprocessing_path, appids, results, selected,
-                 labels, profiles, k_values, n_features, best_model):
+                 labels, profiles, k_values, n_features, seeds, best_model):
     output_dir.mkdir(parents=True, exist_ok=True)
     metrics_path = output_dir / "clustering_metrics.csv"
     assignments_path = output_dir / "cluster_assignments.csv"
@@ -210,11 +210,12 @@ def save_outputs(output_dir, features_path, preprocessing_path, appids, results,
             "n_init": row["n_init"],
             "silhouette": number(row["silhouette"]),
             "davies_bouldin": number(row["davies_bouldin"]),
+            "stability_ari": number(row["stability_ari"]),
             "selected": int(row is selected),
         })
     write_csv(
         metrics_path,
-        ["algorithm", "k", "n_init", "silhouette", "davies_bouldin", "selected"],
+        ["algorithm", "k", "n_init", "silhouette", "davies_bouldin", "stability_ari", "selected"],
         metric_rows,
     )
     write_csv(
@@ -245,6 +246,7 @@ def save_outputs(output_dir, features_path, preprocessing_path, appids, results,
         "rows": len(appids),
         "n_features": n_features,
         "k_values": list(k_values),
+        "seeds": list(seeds),
         "selected": {
             "algorithm": selected["algorithm"],
             "n_init": selected["n_init"],
@@ -272,12 +274,17 @@ def save_outputs(output_dir, features_path, preprocessing_path, appids, results,
 
 
 def print_report(results, selected, output_dir):
-    print(f"{'algoritmo':>14} {'k':>3} {'n_init':>6} {'silhouette':>12} {'davies_bouldin':>15}")
+    print(
+        f"{'algoritmo':>14} {'k':>3} {'n_init':>6} {'silhouette':>12} "
+        f"{'davies_bouldin':>15} {'ARI medio':>11}"
+    )
     for row in results:
         db = "—" if row["davies_bouldin"] is None else f"{row['davies_bouldin']:.3f}"
+        n_init = "—" if row["n_init"] is None else str(row["n_init"])
         print(
-            f"{row['algorithm']:>14} {row['k']:>3} {row['n_init']:>6} "
-            f"{row['silhouette']:>12.3f} {db:>15}"
+            f"{row['algorithm']:>14} {row['k']:>3} {n_init:>6} "
+            f"{row['silhouette']:>12.3f} {db:>15} "
+            f"{number(row['stability_ari']):>11}"
         )
     db = "—" if selected["davies_bouldin"] is None else f"{selected['davies_bouldin']:.3f}"
     print(
@@ -297,11 +304,18 @@ def main():
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_DIR)
     parser.add_argument("--k-min", type=int, default=2)
     parser.add_argument("--k-max", type=int, default=10)
+    parser.add_argument(
+        "--seeds", type=int, nargs=5, default=[SEED + offset for offset in range(5)],
+        metavar=("S1", "S2", "S3", "S4", "S5"),
+        help="Cinco semillas para K-Means (por defecto: 20261109 a 20261113).",
+    )
 
     args = parser.parse_args()
     try:
         if args.k_min < 2 or args.k_max < args.k_min:
             raise ValueError("El rango de grupos debe cumplir 2 <= k-min <= k-max.")
+        if len(set(args.seeds)) != len(args.seeds):
+            raise ValueError("Las cinco semillas deben ser distintas.")
         appids, raw_matrix, feature_columns, config = read_inputs(args.features, args.preprocessing)
         if args.k_max >= len(appids):
             raise ValueError(
@@ -314,8 +328,20 @@ def main():
         labels_by_configuration = {}
         for algorithm in ALGORITHMS:
             for k in k_values:
-                model = fit_model(algorithm, matrix, k)
-                labels_k, cluster_order = relabel_by_size(appids, model.labels_, k)
+                if algorithm == "kmeans":
+                    fitted_models = [fit_model(algorithm, matrix, k, seed) for seed in args.seeds]
+                    model = fitted_models[0]
+                    labels_by_seed = [fitted.labels_ for fitted in fitted_models]
+                    stability_ari = float(np.mean([
+                        adjusted_rand_score(labels_by_seed[first], labels_by_seed[second])
+                        for first in range(len(labels_by_seed))
+                        for second in range(first + 1, len(labels_by_seed))
+                    ]))
+                else:
+                    model = fit_model(algorithm, matrix, k)
+                    stability_ari = None
+
+                labels_k, _ = relabel_by_size(appids, model.labels_, k)
                 counts = np.bincount(labels_k)
                 if counts.size < 2 or counts.min() < 2:
                     continue
@@ -325,6 +351,7 @@ def main():
                     "n_init": 10 if algorithm == "kmeans" else None,
                     "silhouette": float(silhouette_score(matrix, labels_k)),
                     "davies_bouldin": float(davies_bouldin_score(matrix, labels_k)),
+                    "stability_ari": stability_ari,
                 })
                 key = (algorithm, k)
                 labels_by_configuration[key] = labels_k
@@ -354,7 +381,7 @@ def main():
         profiles = build_profiles(matrix, labels, feature_columns, config, selected["k"])
         save_outputs(
             args.output_dir, args.features, args.preprocessing, appids, results, selected,
-            labels, profiles, k_values, len(feature_columns), best_model,
+            labels, profiles, k_values, len(feature_columns), args.seeds, best_model,
         )
     except (OSError, ValueError) as error:
         parser.exit(1, f"Error: {error}\n")

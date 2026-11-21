@@ -54,10 +54,13 @@ de plataformas. No elimina juegos silenciosamente ni rellena esos datos.
 Las categorías ausentes se interpretan como lista vacía, con todos sus
 indicadores a cero.
 
-La fecha de referencia fija es `2026-11-09`, para que la antigüedad no cambie
-según el día de ejecución. Conserva las fechas aproximadas que ya contiene
-el CSV de muestra. Los parámetros y el vocabulario de columnas se calculan
-sobre la muestra completa.
+La fecha de referencia predeterminada es `2026-11-21`, necesaria para incluir
+juegos de la muestra lanzados hasta ese día. Así, la antigüedad es reproducible
+y no depende de la fecha en que se ejecute el script. Puede fijarse otra fecha
+con `--reference-date AAAA-MM-DD`; se debe usar la misma al regenerar las
+variables para reproducir un análisis. Se conservan las fechas aproximadas del
+CSV de muestra, y los parámetros y el vocabulario se calculan sobre la muestra
+completa.
 
 ## Uso
 
@@ -68,8 +71,9 @@ Después de fijar `data/interim/final_sample.csv`:
 ```
 
 Permite cambiar las rutas con `--sample`, `--raw-dir` y `--output-dir`, y la
-fecha con `--reference-date AAAA-MM-DD`. Los archivos de salida se sobrescriben
-al volver a ejecutarlo; la muestra y los JSONL originales no se modifican.
+fecha con `--reference-date AAAA-MM-DD` (por defecto, `2026-11-21`). Los archivos
+de salida se sobrescriben al volver a ejecutarlo; la muestra y los JSONL
+originales no se modifican.
 
 ## Script `cluster_metadata.py`
 
@@ -82,14 +86,14 @@ Compara particiones; no vuelve a preparar variables ni toca la muestra:
 
    Ward) para k de 2 a 10. La distancia es la euclídea, coherente con el
     escalado de precio y antigüedad.
-3. En cada combinación calcula silhouette y Davies-Bouldin. En k-means repite
-
-   el ajuste con cinco semillas (`20261109` y las cuatro siguientes) y resume
-    la estabilidad con el ARI medio entre parejas. Ward no usa semilla, así que
-    su estabilidad queda vacía.
+3. En cada combinación calcula silhouette y Davies-Bouldin sobre la partición
+   completa. K-Means se ajusta con cinco semillas (`20261109` y las cuatro
+   siguientes); se guarda el ARI medio entre las diez parejas de particiones.
+   Las métricas y asignaciones de K-Means corresponden a la primera semilla.
+   Ward no usa semilla, así que su estabilidad queda vacía.
 4. Elige la combinación con mayor silhouette. En un empate gana el menor
-
-   Davies-Bouldin, luego la mayor estabilidad y, por último, el menor k.
+   Davies-Bouldin y, después, el menor k. El ARI se informa, pero no interviene
+   en la selección.
 5. Numera los grupos de mayor a menor tamaño y guarda, en el mismo directorio:
    - `clustering_metrics.csv`: métricas de todas las combinaciones válidas.
    - `cluster_assignments.csv`: `appid` y grupo del modelo elegido.
@@ -109,5 +113,7 @@ salidas; no modifica `features.csv` ni `preprocessing.json`.
 ```
 
 `--features`, `--preprocessing` y `--output-dir` cambian las rutas. `--k-min`,
-`--k-max` y `--seeds` cambian la búsqueda. La primera semilla de `--seeds` es
-la que produce los grupos guardados.
+`--k-max` cambian el rango de grupos. `--seeds` permite especificar exactamente
+cinco semillas para K-Means; la primera produce las métricas y las asignaciones
+que se guardan. El ARI medio se reporta en `clustering_metrics.csv` y no afecta
+la selección del algoritmo ni de k.
