@@ -2,9 +2,9 @@
 
 Lee features.csv y preprocessing.json, prueba ambos algoritmos para k=2..10,
 calcula silhouette y Davies-Bouldin sobre la partición completa y exporta
-las métricas, las asignaciones y los perfiles. Solo K-Means permite predecir
-juegos nuevos; persistir un modelo asignable (.pkl) queda pendiente para el
-cierre del proyecto.
+las métricas, las asignaciones y los perfiles. Persiste en `.pkl` únicamente
+K-Means cuando resulta seleccionado; Ward no ofrece predicción para juegos
+nuevos.
 """
 
 import argparse
@@ -323,7 +323,10 @@ def print_report(results, selected, output_dir):
         f"davies_bouldin={db}"
     )
     if selected["algorithm"] == "agglomerative":
-        print("Ward no genera un modelo predictivo .pkl.")
+        print(
+            "Ward no ofrece predict() para juegos nuevos; "
+            "no se guarda un modelo predictivo .pkl."
+        )
     print(f"Resultados en {output_dir.resolve()}")
 
 

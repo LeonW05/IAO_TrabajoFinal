@@ -12,8 +12,8 @@ se reservan para la validación externa.
 - [x] Crear `cluster_metadata.py`: probar algoritmos y números de grupos.
 - [x] Evaluar silhouette, Davies-Bouldin y estabilidad entre semillas.
 - [x] Guardar y describir los grupos para compararlos con el modelo B.
-- [ ] Persistir un modelo asignable (`.pkl`) al cierre del proyecto, solo si
-  hace falta clasificar juegos nuevos.
+- [x] Guardar un `.pkl` de K-Means si es el algoritmo seleccionado; Ward no
+  ofrece predicción nativa para juegos nuevos.
 
 ## Variables iniciales
 
@@ -104,9 +104,11 @@ Compara particiones; no vuelve a preparar variables ni toca la muestra:
    frecuentes.
    - `clustering.json`: semillas, regla de selección y rutas.
 
-Esta entrega no incluye un `.pkl`: el modelo elegido es Ward, que no permite
-predecir. La persistencia de un modelo asignable (K-Means) queda pendiente
-para el cierre del proyecto.
+Se guarda `modelo_A.pkl` solo si el algoritmo seleccionado es K-Means; el
+archivo permite asignar juegos nuevos, siempre que se aplique el mismo
+preprocesamiento y orden de variables. Si se selecciona Ward, no se guarda un
+modelo predictivo: aunque se serialice su objeto con `.pkl`, no ofrece
+`predict()` para asignar juegos nuevos.
 
 Una combinación se descarta si algún grupo tiene menos de dos juegos, porque
 silhouette y Davies-Bouldin no se pueden calcular.
@@ -137,6 +139,6 @@ Ejecutado sobre 2.000 juegos y 85 variables. Se eligió **Ward con k=2**
 
 El grupo 0 reúne juegos más baratos y antiguos; el grupo 1, juegos más caros
 y recientes. La estabilidad de K-Means es alta para k=2 (ARI 1,000), aunque
-Ward obtiene mejor silhouette. Ward no produce un modelo predictivo `.pkl`;
-la versión asignable con K-Means k=2 queda pendiente para el cierre del
-proyecto.
+Ward obtiene mejor silhouette. Como se seleccionó Ward, no se genera un
+`.pkl` asignable. El script lo persistirá automáticamente si K-Means resulta
+seleccionado en otra ejecución.
