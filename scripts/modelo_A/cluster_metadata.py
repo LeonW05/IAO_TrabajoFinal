@@ -147,6 +147,16 @@ def build_profiles(matrix, labels, feature_columns, config, n_clusters):
     if missing:
         raise ValueError(f"Faltan columnas para describir los grupos: {', '.join(missing)}")
     vocabularies = config.get("vocabularies") or {}
+    scaling = config.get("numeric_scaling") or {}
+    try:
+        price_mean = float(scaling["price_log1p"]["mean"])
+        price_scale = float(scaling["price_log1p"]["scale"])
+        age_mean = float(scaling["age_years"]["mean"])
+        age_scale = float(scaling["age_years"]["scale"])
+    except (KeyError, TypeError, ValueError):
+        raise ValueError(
+            "preprocessing.json no contiene el escalado de precio y antigüedad."
+        ) from None
     genres = column_indexes(feature_columns, "genres_")
     categories = column_indexes(feature_columns, "categories_")
     profiles = []
@@ -159,8 +169,8 @@ def build_profiles(matrix, labels, feature_columns, config, n_clusters):
                 "cluster": cluster,
                 "size": 0,
                 "share": 0.0,
-                "mean_price_log1p_scaled": 0.0,
-                "mean_age_years_scaled": 0.0,
+                "mean_price_eur": 0.0,
+                "mean_age_years": 0.0,
                 "rate_platform_windows": 0.0,
                 "rate_platform_mac": 0.0,
                 "rate_platform_linux": 0.0,
@@ -168,12 +178,20 @@ def build_profiles(matrix, labels, feature_columns, config, n_clusters):
                 "top_categories": "",
             })
             continue
+        price_log1p = (
+            points[:, feature_columns.index("price_log1p_scaled")] * price_scale
+            + price_mean
+        )
+        age_years = (
+            points[:, feature_columns.index("age_years_scaled")] * age_scale
+            + age_mean
+        )
         profiles.append({
             "cluster": cluster,
             "size": size,
             "share": size / total,
-            "mean_price_log1p_scaled": mean_column(points, feature_columns, "price_log1p_scaled"),
-            "mean_age_years_scaled": mean_column(points, feature_columns, "age_years_scaled"),
+            "mean_price_eur": float(np.expm1(price_log1p).mean()),
+            "mean_age_years": float(age_years.mean()),
             "rate_platform_windows": mean_column(points, feature_columns, "platform_windows"),
             "rate_platform_mac": mean_column(points, feature_columns, "platform_mac"),
             "rate_platform_linux": mean_column(points, feature_columns, "platform_linux"),
@@ -224,7 +242,7 @@ def save_outputs(output_dir, features_path, preprocessing_path, appids, results,
         [{"appid": appid, "cluster": cluster} for appid, cluster in zip(appids, labels)],
     )
     profile_fields = [
-        "cluster", "size", "share", "mean_price_log1p_scaled", "mean_age_years_scaled",
+        "cluster", "size", "share", "mean_price_eur", "mean_age_years",
         "rate_platform_windows", "rate_platform_mac", "rate_platform_linux",
         "top_genres", "top_categories",
     ]
@@ -233,8 +251,8 @@ def save_outputs(output_dir, features_path, preprocessing_path, appids, results,
         profile_rows.append({
             **profile,
             "share": number(profile["share"]),
-            "mean_price_log1p_scaled": number(profile["mean_price_log1p_scaled"]),
-            "mean_age_years_scaled": number(profile["mean_age_years_scaled"]),
+            "mean_price_eur": number(profile["mean_price_eur"]),
+            "mean_age_years": number(profile["mean_age_years"]),
             "rate_platform_windows": number(profile["rate_platform_windows"]),
             "rate_platform_mac": number(profile["rate_platform_mac"]),
             "rate_platform_linux": number(profile["rate_platform_linux"]),
