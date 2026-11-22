@@ -8,14 +8,16 @@ estructurales y de texto.
 ## Estado actual
 
 - Listado oficial de **199.314 juegos** obtenido con `IStoreService/GetAppList`.
-- **2.505** juegos con `appdetails` descargados.
-- **265 aptos** tras aplicar los filtros (10,6 %).
+- **19.236** juegos con `appdetails` descargados.
+- **2.075 aptos** tras aplicar los filtros (10,8 %).
 - **Piloto Fase 0:** 270 juegos (30 por estrato) para validar el pipeline.
-- **Dataset final:** muestra aleatoria de ~2.000 elegibles; no se filtra por
-Metacritic.
+- **Dataset final:** 2.000 juegos elegibles seleccionados al azar con semilla
+`20261109`; no se filtra por Metacritic.
+- **Modelo A:** clustering con metadatos ejecutado sobre la muestra final
+(Ward, k=2).
 
-La descarga sigue en curso hasta tener suficientes elegibles para la muestra
-final.
+La muestra final está fijada y el Modelo A ya está ejecutado. La descarga de
+`appdetails` no continúa salvo que se quiera ampliar la muestra.
 
 ## Requisitos
 
@@ -231,10 +233,11 @@ El estado y las tareas específicas de cada modelo se mantienen por separado:
 
 Tareas generales del proyecto:
 
-- Completar la descarga hasta tener el tamaño elegido (2.000; 1.500 si el
+- [x] Completar la descarga hasta tener el tamaño elegido (2.000; 1.500 si el
 tiempo aprieta).
-- Generar `data/interim/final_sample.csv` con la muestra aleatoria (semilla
+- [x] Generar `data/interim/final_sample.csv` con la muestra aleatoria (semilla
 `20261109`).
-- Extraer reseñas en inglés (30–50 por juego).
-- Preparar el A/B de modelos (metadatos vs. metadatos + texto).
-- Cruzar los clusters con Metacritic y SteamSpy y reportar la cobertura.
+- [ ] Extraer reseñas en inglés (30–50 por juego).
+- [x] Modelo A: clustering con metadatos.
+- [ ] Modelo B: metadatos y texto.
+- [ ] Cruzar los clusters con Metacritic y SteamSpy y reportar la cobertura.
