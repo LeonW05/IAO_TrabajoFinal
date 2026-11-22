@@ -12,7 +12,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SAMPLE = PROJECT_ROOT / "data/interim/final_sample.csv"
 DEFAULT_RAW = PROJECT_ROOT / "data/raw"
 DEFAULT_OUTPUT = PROJECT_ROOT / "data/processed/modelo_A"
-REFERENCE_DATE = date(2026, 11, 9)
+REFERENCE_DATE = date(2026, 11, 21)
 PLATFORMS = ("windows", "mac", "linux")
 
 
@@ -146,7 +146,7 @@ def main():
     parser.add_argument("--raw-dir", type=Path, default=DEFAULT_RAW)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--reference-date", type=date.fromisoformat, default=REFERENCE_DATE,
-                        help="Fecha fija AAAA-MM-DD (por defecto: 2026-11-09).")
+                        help="Fecha de referencia AAAA-MM-DD (por defecto: 2026-11-21).")
     args = parser.parse_args()
     try:
         sample = read_sample(args.sample)
