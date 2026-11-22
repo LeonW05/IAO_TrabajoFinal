@@ -2,8 +2,9 @@
 
 Lee features.csv y preprocessing.json, prueba ambos algoritmos para k=2..10,
 calcula silhouette y Davies-Bouldin sobre la partición completa y exporta
-el modelo elegido (.pkl) junto con sus métricas, asignaciones y perfiles.
-Solo K-Means permite predecir juegos nuevos.
+las métricas, las asignaciones y los perfiles. Solo K-Means permite predecir
+juegos nuevos; persistir un modelo asignable (.pkl) queda pendiente para el
+cierre del proyecto.
 """
 
 import argparse
