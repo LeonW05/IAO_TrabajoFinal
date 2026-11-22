@@ -265,12 +265,22 @@ def save_outputs(output_dir, features_path, preprocessing_path, appids, results,
         "n_features": n_features,
         "k_values": list(k_values),
         "seeds": list(seeds),
+        "algorithms": list(ALGORITHMS),
+        "selection_rule": (
+            "Mayor silhouette; empate: menor Davies-Bouldin; "
+            "empate: menor k; empate: K-Means antes que Ward."
+        ),
+        "stability_note": (
+            "ARI medio entre las 10 parejas de las 5 semillas de K-Means; "
+            "no interviene en la selección."
+        ),
         "selected": {
             "algorithm": selected["algorithm"],
             "n_init": selected["n_init"],
             "k": selected["k"],
             "silhouette": selected["silhouette"],
             "davies_bouldin": selected["davies_bouldin"],
+            "predict_available": best_model is not None,
         },
         "metric_scope": "partición completa",
         "outputs": {

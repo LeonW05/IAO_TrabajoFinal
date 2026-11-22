@@ -10,8 +10,8 @@ se reservan para la validación externa.
 - [x] Crear `prepare_features.py`: extraer, codificar y escalar los metadatos
   de la muestra final.
 - [x] Crear `cluster_metadata.py`: probar algoritmos y números de grupos.
-- [ ] Evaluar silhouette, Davies-Bouldin y estabilidad entre semillas.
-- [ ] Guardar y describir los grupos para compararlos con el modelo B.
+- [x] Evaluar silhouette, Davies-Bouldin y estabilidad entre semillas.
+- [x] Guardar y describir los grupos para compararlos con el modelo B.
 
 ## Variables iniciales
 
@@ -97,8 +97,9 @@ Compara particiones; no vuelve a preparar variables ni toca la muestra:
 5. Numera los grupos de mayor a menor tamaño y guarda, en el mismo directorio:
    - `clustering_metrics.csv`: métricas de todas las combinaciones válidas.
    - `cluster_assignments.csv`: `appid` y grupo del modelo elegido.
-   - `cluster_profiles.csv`: tamaño, peso, medias de precio y antigüedad,
-   proporción de plataformas y géneros y categorías más frecuentes.
+   - `cluster_profiles.csv`: tamaño, peso, precio medio en EUR, antigüedad
+   media en años, proporción de plataformas y géneros y categorías más
+   frecuentes.
    - `clustering.json`: semillas, regla de selección y rutas.
 
 Una combinación se descarta si algún grupo tiene menos de dos juegos, porque
@@ -117,3 +118,17 @@ salidas; no modifica `features.csv` ni `preprocessing.json`.
 cinco semillas para K-Means; la primera produce las métricas y las asignaciones
 que se guardan. El ARI medio se reporta en `clustering_metrics.csv` y no afecta
 la selección del algoritmo ni de k.
+
+## Resultado sobre la muestra final
+
+Ejecutado sobre 2.000 juegos y 85 variables. Se eligió **Ward con k=2**
+(silhouette 0,1527; Davies-Bouldin 2,6188).
+
+| Grupo | Juegos | Peso | Precio medio | Antigüedad media |
+|---|---:|---:|---:|---:|
+| 0 | 1.578 | 78,9 % | 12,61 EUR | 6,96 años |
+| 1 | 422 | 21,1 % | 17,71 EUR | 1,89 años |
+
+El grupo 0 reúne juegos más baratos y antiguos; el grupo 1, juegos más caros
+y recientes. La estabilidad de K-Means es alta para k=2 (ARI 1,000), aunque
+Ward obtiene mejor silhouette. Ward no produce un modelo predictivo `.pkl`.
