@@ -22,6 +22,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DIR = PROJECT_ROOT / "data/processed/modelo_A"
 SEED = 20261109
 ALGORITHMS = ("kmeans", "agglomerative")
+ALGORITHM_RANK = {algorithm: rank for rank, algorithm in enumerate(ALGORITHMS)}
 PROFILE_LIMIT = 5
 
 
@@ -89,14 +90,14 @@ def fit_model(algorithm, matrix, k, seed=SEED):
 
 
 def select_best(results):
-    """Mayor silhouette; en empate, menor Davies-Bouldin."""
+    """Mayor silhouette; en empate, menor Davies-Bouldin, menor k y K-Means."""
     def key(row):
         db = row["davies_bouldin"]
         return (
             -row["silhouette"],
             float("inf") if db is None else db,
             row["k"],
-            row["algorithm"],
+            ALGORITHM_RANK[row["algorithm"]],
         )
     return min(results, key=key)
 
