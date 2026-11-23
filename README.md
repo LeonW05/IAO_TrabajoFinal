@@ -234,10 +234,24 @@ El estado y las tareas específicas de cada modelo se mantienen por separado:
 Tareas generales del proyecto:
 
 - [x] Completar la descarga hasta tener el tamaño elegido (2.000; 1.500 si el
-tiempo aprieta).
+  tiempo aprieta).
 - [x] Generar `data/interim/final_sample.csv` con la muestra aleatoria (semilla
-`20261109`).
-- [ ] Extraer reseñas en inglés (30–50 por juego).
-- [x] Modelo A: clustering con metadatos.
-- [ ] Modelo B: metadatos y texto.
-- [ ] Cruzar los clusters con Metacritic y SteamSpy y reportar la cobertura.
+  `20261109`).
+- [x] Extraer reseñas en inglés (100 por juego, 2.000 registros válidos).
+- [x] Auditar la cobertura y fijar el umbral de 10 reseñas para el Modelo B
+  (1.942 juegos).
+- [x] Modelo A: clustering con metadatos (Ward, k=2).
+- [ ] **Modelo B: preparar features** — crear `prepare_features.py` para
+  TF-IDF de reseñas y descripción, media de vectores, % positivas, longitud
+  media, SVD, y unir con metadatos.
+- [ ] **Modelo B: clustering** — crear `cluster_metadata_text.py` y ejecutar
+  K-Means/Ward sobre la muestra de 1.942 juegos, guardar assignments.
+- [ ] **Modelo A_sub** — filtrar el clustering A sobre los 1.942 juegos para
+  comparación justa.
+- [ ] **Comparación A × B** — calcular ARI y generar tabla cruzada entre
+  A_sub y B; reportar en el README principal.
+- [ ] **Validaciones externas** — descargar SteamSpy para 2.000 appids,
+  cruzar con clusters y reportar cobertura de Metacritic por cluster.
+- [ ] Generar figuras para la memoria (heatmap de perfiles, precio/edad por
+  cluster, términos TF-IDF por cluster, validación externa).
+- [ ] Documentar limitaciones (sesgo de idioma no anglófono) y conclusiones.

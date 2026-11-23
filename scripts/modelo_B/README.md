@@ -6,13 +6,18 @@ Metacritic y SteamSpy se reservan para la validación externa.
 ## Seguimiento
 
 - [x] Crear la carpeta y la documentación.
-- [ ] Definir cómo seleccionar 30–50 reseñas por juego y descargarlas con
-  el futuro script común `scripts/games_reviews.py`.
-- [ ] Crear `prepare_features.py`: preparar el texto y combinarlo con los
-  metadatos del modelo A; decidir qué hacer si faltan reseñas.
-- [ ] Crear `cluster_metadata_text.py`: probar algoritmos y números de grupos.
-- [ ] Evaluar silhouette, Davies-Bouldin y estabilidad entre semillas.
-- [ ] Guardar y describir los grupos y compararlos con el modelo A.
+- [x] Definir cómo seleccionar las reseñas y crear el script común
+  `scripts/games_reviews.py`.
+- [x] Descargar 100 reseñas en inglés por juego (2.000 registros válidos).
+- [x] Auditar la cobertura y fijar el umbral de 10 reseñas (1.942 juegos).
+- [ ] Crear `prepare_features.py`: preparar la descripción y las reseñas,
+  aplicar el umbral de 10 reseñas y combinarlas con los metadatos del
+  modelo A.
+- [ ] Crear `cluster_metadata_text.py`: probar algoritmos y números de
+  grupos sobre la muestra de 1.942 juegos.
+- [ ] Ejecutar el Modelo A sobre los 1.942 juegos (`A_sub`) para comparar
+  sobre la misma muestra.
 
-Todavía no hay scripts del modelo. Usará `data/interim/final_sample.csv`
-y sus reseñas descargadas.
+**Lo que sigue (en el README principal):** generación de figuras, comparación
+A × B (ARI y tabla cruzada), validaciones externas (SteamSpy, Metacritic) y
+redacción de conclusiones.
