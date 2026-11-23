@@ -193,7 +193,7 @@ Metacritic como comprobación de robustez.
 2. Comprobar que `data/interim/eligible_candidates.csv` tiene al menos el
 
    tamaño elegido (2.000; 1.500 si el tiempo aprieta). Si no, seguir
-         descargando `appdetails` por tandas.
+          descargando `appdetails` por tandas.
 3. Generar la muestra con semilla fija y guardarla en
 
    `data/interim/final_sample.csv`:
@@ -241,7 +241,7 @@ Tareas generales del proyecto:
 - [x] Auditar la cobertura y fijar el umbral de 10 reseñas para el Modelo B
   (1.942 juegos).
 - [x] Modelo A: clustering con metadatos (Ward, k=2).
-- [ ] **Modelo B: preparar features** — crear `prepare_features.py` para
+- [x] **Modelo B: preparar features** — crear `prepare_features.py` para
   TF-IDF de reseñas y descripción, media de vectores, % positivas, longitud
   media, SVD, y unir con metadatos.
 - [ ] **Modelo B: clustering** — crear `cluster_metadata_text.py` y ejecutar
