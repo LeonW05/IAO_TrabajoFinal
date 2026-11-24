@@ -20,6 +20,7 @@ from sklearn.metrics import adjusted_rand_score, davies_bouldin_score, silhouett
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DIR = PROJECT_ROOT / "data/processed/modelo_A"
+DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "modelos/modelo_A"
 SEED = 20261109
 ALGORITHMS = ("kmeans", "agglomerative")
 ALGORITHM_RANK = {algorithm: rank for rank, algorithm in enumerate(ALGORITHMS)}
@@ -334,7 +335,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--features", type=Path, default=DEFAULT_DIR / "features.csv")
     parser.add_argument("--preprocessing", type=Path, default=DEFAULT_DIR / "preprocessing.json")
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_DIR)
+    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--k-min", type=int, default=2)
     parser.add_argument("--k-max", type=int, default=10)
     parser.add_argument(

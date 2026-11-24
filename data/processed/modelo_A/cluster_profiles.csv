@@ -1,3 +1,0 @@
-cluster,size,share,mean_price_eur,mean_age_years,rate_platform_windows,rate_platform_mac,rate_platform_linux,top_genres,top_categories
-0,1578,0.789000,12.606527,6.957045,1.000000,0.297212,0.192649,Indie (67%); Adventure (46%); Action (38%); Casual (33%); Simulation (27%),Family Sharing (99%); Single-player (98%); Steam Achievements (72%); Steam Cloud (52%); Steam Trading Cards (39%)
-1,422,0.211000,17.711185,1.888611,1.000000,0.312796,0.203791,Indie (71%); Adventure (48%); Action (42%); Casual (33%); Simulation (31%),Family Sharing (100%); Single-player (98%); Steam Achievements (93%); Steam Cloud (84%); Full controller support (69%)
