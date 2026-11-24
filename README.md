@@ -31,6 +31,7 @@ descarga de `appdetails` no continúa salvo que se quiera ampliar la muestra.
 
 ```bash
 .venv/bin/pip install requests beautifulsoup4 lxml python-dateutil python-dotenv numpy scikit-learn joblib
+.venv/bin/pip install requests beautifulsoup4 lxml python-dateutil python-dotenv numpy scipy scikit-learn joblib matplotlib
 ```
 
 Estas dependencias se encuentran en `requirements.txt`. Para instalar:
@@ -79,6 +80,7 @@ scripts/
   compare_models.py       # comparación de asignaciones A_sub × B (ARI y tabla cruzada)
   fetch_steamspy.py       # descarga de propietarios estimados (SteamSpy)
   external_validation.py  # validación externa (SteamSpy + Metacritic) por cluster
+  generate_figures.py     # genera las 6 figuras para la memoria en modelos/figuras/
 data/
   steam_appids.csv        # 199.314 appids
   raw/                    # respuestas de Steam sin tocar (JSONL)
@@ -144,9 +146,14 @@ también admite `--size 1500` para un dataset nuevo de menor tamaño.
 ```bash
 .venv/bin/python scripts/fetch_steamspy.py
 .venv/bin/python scripts/external_validation.py
+```
 
+### 7. Generar figuras para la memoria
+
+```bash
+.venv/bin/python scripts/generate_figures.py
+```
 ## Criterios del dataset
-
 El dataset final se construyó con una **muestra aleatoria de elegibles**, sin
 cuotas fijas por estrato. Criterios aplicados:
 
@@ -171,6 +178,7 @@ Davies-Bouldin y estabilidad entre semillas.
 - Análisis externo: Metacritic y SteamSpy solo después de fijar los grupos.
 Reportar cobertura por cluster y repetir el análisis en el subconjunto con
 Metacritic como comprobación de robustez.
+
 
 
 ## Capas de datos
@@ -213,6 +221,6 @@ Tareas generales del proyecto:
   en `modelos/comparacion_A_B/`.
 - [x] **Validaciones externas** — descargar SteamSpy para 2.000 appids,
   cruzar con clusters y reportar cobertura de Metacritic por cluster.
-- [ ] Generar figuras para la memoria (heatmap de perfiles, precio/edad por
+- [x] Generar figuras para la memoria (heatmap de perfiles, precio/edad por
   cluster, términos TF-IDF por cluster, validación externa).
 - [ ] Documentar limitaciones (sesgo de idioma no anglófono) y conclusiones.
