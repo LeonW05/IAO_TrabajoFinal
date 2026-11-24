@@ -37,9 +37,9 @@
   },
   "metric_scope": "partición completa",
   "outputs": {
-    "metrics": "/home/leon/Proyectos/IAO_TrabajoFinal/data/processed/modelo_A/clustering_metrics.csv",
-    "assignments": "/home/leon/Proyectos/IAO_TrabajoFinal/data/processed/modelo_A/cluster_assignments.csv",
-    "profiles": "/home/leon/Proyectos/IAO_TrabajoFinal/data/processed/modelo_A/cluster_profiles.csv",
+    "metrics": "/home/leon/Proyectos/IAO_TrabajoFinal/modelos/modelo_A/clustering_metrics.csv",
+    "assignments": "/home/leon/Proyectos/IAO_TrabajoFinal/modelos/modelo_A/cluster_assignments.csv",
+    "profiles": "/home/leon/Proyectos/IAO_TrabajoFinal/modelos/modelo_A/cluster_profiles.csv",
     "model": null
   },
   "excluded_from_fit": [

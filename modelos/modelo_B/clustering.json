@@ -1,0 +1,91 @@
+{
+  "features_path": "/home/leon/Proyectos/IAO_TrabajoFinal/data/processed/modelo_B/features.csv",
+  "preprocessing_path": "/home/leon/Proyectos/IAO_TrabajoFinal/data/processed/modelo_B/preprocessing.json",
+  "rows": 1942,
+  "n_features": 187,
+  "k_values": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "seeds": [
+    20261109,
+    20261110,
+    20261111,
+    20261112,
+    20261113
+  ],
+  "algorithms": [
+    "kmeans",
+    "agglomerative"
+  ],
+  "selection_rule": "Mayor silhouette; empate: menor Davies-Bouldin; empate: menor k; empate: K-Means antes que Ward.",
+  "stability_note": "ARI medio entre las 10 parejas de las 5 semillas de K-Means; no interviene en la selección.",
+  "selected": {
+    "algorithm": "kmeans",
+    "n_init": 10,
+    "k": 2,
+    "silhouette": 0.05416113406324781,
+    "davies_bouldin": 4.094993065924728,
+    "predict_available": true
+  },
+  "metric_scope": "partición completa",
+  "feature_blocks": {
+    "metadata": {
+      "columns": 85,
+      "total_variance_before": 7.629903663502101,
+      "weight": 1.0,
+      "block_scale": 1.0,
+      "total_variance_after": 7.629903663502101
+    },
+    "reviews_text": {
+      "columns": 50,
+      "total_variance_before": 0.5808755105822205,
+      "weight": 1.0,
+      "block_scale": 3.6242487153716456,
+      "total_variance_after": 7.629903663502102
+    },
+    "description_text": {
+      "columns": 50,
+      "total_variance_before": 0.7651957270816726,
+      "weight": 1.0,
+      "block_scale": 3.15771739220487,
+      "total_variance_after": 7.6299036635021
+    },
+    "review_stats": {
+      "columns": 2,
+      "total_variance_before": 1.9999999999999984,
+      "weight": 0.5,
+      "block_scale": 0.9765950839205384,
+      "total_variance_after": 1.9074759158755252
+    }
+  },
+  "text_terms_limit": 10,
+  "profile_units": {
+    "mean_price_eur": "EUR",
+    "mean_age_years": "años",
+    "rate_platform_*": "proporción 0-1",
+    "mean_pct_positive": "porcentaje 0-100",
+    "mean_review_words": "palabras por reseña"
+  },
+  "outputs": {
+    "metrics": "/home/leon/Proyectos/IAO_TrabajoFinal/modelos/modelo_B/clustering_metrics.csv",
+    "assignments": "/home/leon/Proyectos/IAO_TrabajoFinal/modelos/modelo_B/cluster_assignments.csv",
+    "profiles": "/home/leon/Proyectos/IAO_TrabajoFinal/modelos/modelo_B/cluster_profiles.csv",
+    "model": "/home/leon/Proyectos/IAO_TrabajoFinal/modelos/modelo_B/modelo_B.pkl"
+  },
+  "excluded_from_fit": [
+    "appid",
+    "name",
+    "metacritic",
+    "reviews",
+    "SteamSpy",
+    "stratum"
+  ]
+}

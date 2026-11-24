@@ -46,7 +46,7 @@ Prepara la tabla numérica; todavía no entrena ni asigna grupos:
    identificador se repite, conserva el último registro leído, igual que el
     script de resumen.
 3. Valida los datos y aplica las transformaciones de la tabla anterior.
-4. Guarda los resultados en `data/processed/modelo_A/`:
+4. Guarda los resultados en `data/processed/modelo_A/` (features y datos de entrada) y `modelos/modelo_A/` (artefactos del clustering):
    - `features.csv`: una fila por juego, con `appid` y las variables numéricas.
    - `preprocessing.json`: columnas, etiquetas de géneros y categorías,
    medias, desviaciones, fecha de referencia y reglas aplicadas.
