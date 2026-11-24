@@ -16,6 +16,10 @@ estructurales y de texto.
 (Ward, k=2).
 - **Modelo B:** features de metadatos y texto y clustering ejecutados sobre
 1.942 juegos (K-Means, k=2).
+- **Comparación A × B:** 1.942 juegos alineados, ARI `-0,0018`.
+- **Validación externa:** SteamSpy descargado para los 2.000 appids (100 %)
+  y cruzado junto con Metacritic (16,9 % de cobertura) con los clusters de A,
+  `A_sub` y B en `modelos/validacion_externa/`.
 
 La muestra final está fijada y los Modelos A y B ya están ejecutados. La
 descarga de `appdetails` no continúa salvo que se quiera ampliar la muestra.
@@ -73,6 +77,8 @@ scripts/
   modelo_A/               # preparación y clustering con metadatos
   modelo_B/               # preparación de texto y clustering con metadatos + texto
   compare_models.py       # comparación de asignaciones A_sub × B (ARI y tabla cruzada)
+  fetch_steamspy.py       # descarga de propietarios estimados (SteamSpy)
+  external_validation.py  # validación externa (SteamSpy + Metacritic) por cluster
 data/
   steam_appids.csv        # 199.314 appids
   raw/                    # respuestas de Steam sin tocar (JSONL)
@@ -133,6 +139,11 @@ regenerar para reproducir los análisis actuales. Si en el futuro se reconstruye
 el dataset desde cero, `scripts/select_sample.py` selecciona 2.000 juegos con
 semilla `20261109`, sin cuotas por estrato ni filtro por Metacritic. El script
 también admite `--size 1500` para un dataset nuevo de menor tamaño.
+### 6. Validación externa (SteamSpy y Metacritic)
+
+```bash
+.venv/bin/python scripts/fetch_steamspy.py
+.venv/bin/python scripts/external_validation.py
 
 ## Criterios del dataset
 
@@ -200,7 +211,7 @@ Tareas generales del proyecto:
   A a los appids de B, calcula el ARI y genera asignaciones alineadas y tabla
   cruzada. Resultado: 1.942 juegos comparados, ARI **-0,0018**; tabla y resumen
   en `modelos/comparacion_A_B/`.
-- [ ] **Validaciones externas** — descargar SteamSpy para 2.000 appids,
+- [x] **Validaciones externas** — descargar SteamSpy para 2.000 appids,
   cruzar con clusters y reportar cobertura de Metacritic por cluster.
 - [ ] Generar figuras para la memoria (heatmap de perfiles, precio/edad por
   cluster, términos TF-IDF por cluster, validación externa).

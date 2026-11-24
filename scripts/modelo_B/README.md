@@ -18,8 +18,7 @@ Metacritic y SteamSpy se reservan para la validación externa.
 - [x] Generar `A_sub`, comparar las asignaciones A × B con ARI y tabla cruzada
   mediante `scripts/compare_models.py`.
 
-**Lo que sigue (en el README principal):** validaciones externas (SteamSpy,
-Metacritic), figuras y redacción de conclusiones.
+**Lo que sigue (en el README principal):** , figuras y redacción de conclusiones.
 
 La comparación guarda las asignaciones alineadas, las asignaciones A_sub, la
 tabla cruzada y el resumen reproducible en `modelos/comparacion_A_B/`.
