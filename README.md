@@ -242,7 +242,7 @@ Tareas generales del proyecto:
   (1.942 juegos).
 - [x] Modelo A: clustering con metadatos (Ward, k=2).
 - [x] **Modelo B: preparar features** — crear `prepare_features.py` para
-  TF-IDF de reseñas y descripción, media de vectores, % positivas, longitud
+  TF-IDF de reseñas (documento por juego) y descripción, % positivas, longitud
   media, SVD, y unir con metadatos.
 - [ ] **Modelo B: clustering** — crear `cluster_metadata_text.py` y ejecutar
   K-Means/Ward sobre la muestra de 1.942 juegos, guardar assignments.

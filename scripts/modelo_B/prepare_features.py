@@ -115,17 +115,6 @@ def review_statistics(appid, record):
     return positive / (positive + negative), math.log1p(words)
 
 
-def mean_tfidf_by_game(matrix, game_index, n_games):
-    """Media de los vectores TF-IDF de las reseñas de cada juego (ignora reseñas sin vocabulario)."""
-    nonzero = np.flatnonzero(np.diff(matrix.indptr) > 0)
-    counts = np.bincount(game_index[nonzero], minlength=n_games)
-    if (counts == 0).any():
-        raise ValueError("Hay juegos sin ninguna reseña con vocabulario tras el filtrado de términos.")
-    weights = 1.0 / counts[game_index[nonzero]]
-    averaging = sp.csr_matrix((weights, (game_index[nonzero], nonzero)), shape=(n_games, matrix.shape[0]))
-    return normalize(averaging @ matrix)
-
-
 def reduce_svd(matrix, components, seed):
     if not 1 <= components < min(matrix.shape):
         raise ValueError(f"--svd-components debe estar entre 1 y {min(matrix.shape) - 1}.")
@@ -144,15 +133,17 @@ def build_features(sample, metadata, reviews, args, modelo_a):
     appids = [row["appid"] for row in sample]
     descriptions, description_sources = read_descriptions(metadata, appids)
 
-    # Texto de reseñas: un documento por reseña, media de vectores TF-IDF por juego.
-    docs, game_index = [], []
-    for position, appid in enumerate(appids):
-        docs.extend(reviews[appid]["texts"])
-        game_index.extend([position] * len(reviews[appid]["texts"]))
-    game_index = np.array(game_index)
+    # Texto de reseñas: un documento por juego, concatenando sus reseñas únicas.
+    docs, reviews_used, duplicates_removed = [], 0, 0
+    for appid in appids:
+        texts = reviews[appid]["texts"]
+        unique = list(dict.fromkeys(texts))
+        duplicates_removed += len(texts) - len(unique)
+        reviews_used += len(unique)
+        docs.append(" ".join(unique))
     review_vectorizer = TfidfVectorizer(stop_words="english", token_pattern=TOKEN_PATTERN, sublinear_tf=True,
                                         min_df=5, max_df=0.5, max_features=20000)
-    review_tfidf = mean_tfidf_by_game(review_vectorizer.fit_transform(docs), game_index, len(appids))
+    review_tfidf = normalize(review_vectorizer.fit_transform(docs))
     review_svd, review_svd_model = reduce_svd(review_tfidf, args.svd_components, args.seed)
 
     description_vectorizer = TfidfVectorizer(stop_words="english", token_pattern=TOKEN_PATTERN,
@@ -205,13 +196,15 @@ def build_features(sample, metadata, reviews, args, modelo_a):
                      if key not in ("feature_columns", "identifier_column", "rows")},
         "metadata_note": "Mismo preprocesado que el modelo A, ajustado solo a los juegos incluidos.",
         "review_text": {
-            "documents": len(docs), "vocabulary": len(review_vectorizer.vocabulary_),
-            "aggregation": "media de vectores TF-IDF de las reseñas de cada juego, normalizada L2",
+            "documents": len(docs), "reviews_used": reviews_used,
+            "duplicates_removed": duplicates_removed,
+            "vocabulary": len(review_vectorizer.vocabulary_),
+            "aggregation": "un documento por juego concatenando sus reseñas únicas, normalizado L2",
             "svd_components": args.svd_components,
             "svd_explained_variance": float(review_svd_model.explained_variance_ratio_.sum()),
             "cleaning": "entidades HTML, URL y etiquetas BBCode/Steam eliminadas",
-            "tfidf": "stop words inglesas, tokens alfabéticos >=2, sublinear_tf, min_df=5, max_df=0.5, "
-                     "max_features=20000",
+            "tfidf": "stop words inglesas, tokens alfabéticos >=2, sublinear_tf, min_df=5, max_df=0.5 "
+                     "sobre documentos por juego, max_features=20000",
         },
         "description_text": {
             "documents": len(appids), "vocabulary": len(description_vectorizer.vocabulary_),
