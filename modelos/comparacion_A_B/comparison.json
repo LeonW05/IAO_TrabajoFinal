@@ -1,0 +1,23 @@
+{
+  "model_a_path": "/home/leon/Proyectos/IAO_TrabajoFinal/modelos/modelo_A/cluster_assignments.csv",
+  "model_b_path": "/home/leon/Proyectos/IAO_TrabajoFinal/modelos/modelo_B/cluster_assignments.csv",
+  "rows_model_a": 2000,
+  "rows_model_b": 1942,
+  "rows_compared": 1942,
+  "a_only_rows_excluded": 58,
+  "cluster_labels_a_sub": [
+    0,
+    1
+  ],
+  "cluster_labels_b": [
+    0,
+    1
+  ],
+  "adjusted_rand_index": -0.0018445717432616492,
+  "metric": "Adjusted Rand Index (ARI)",
+  "outputs": {
+    "a_sub_assignments": "/home/leon/Proyectos/IAO_TrabajoFinal/modelos/comparacion_A_B/A_sub_assignments.csv",
+    "comparison_assignments": "/home/leon/Proyectos/IAO_TrabajoFinal/modelos/comparacion_A_B/comparison_assignments.csv",
+    "crosstab": "/home/leon/Proyectos/IAO_TrabajoFinal/modelos/comparacion_A_B/crosstab_A_vs_B.csv"
+  }
+}

@@ -15,9 +15,11 @@ estructurales y de texto.
 `20261109`; no se filtra por Metacritic.
 - **Modelo A:** clustering con metadatos ejecutado sobre la muestra final
 (Ward, k=2).
+- **Modelo B:** features de metadatos y texto y clustering ejecutados sobre
+1.942 juegos (K-Means, k=2).
 
-La muestra final está fijada y el Modelo A ya está ejecutado. La descarga de
-`appdetails` no continúa salvo que se quiera ampliar la muestra.
+La muestra final está fijada y los Modelos A y B ya están ejecutados. La
+descarga de `appdetails` no continúa salvo que se quiera ampliar la muestra.
 
 ## Requisitos
 
@@ -69,8 +71,9 @@ scripts/
   appdetails_summary.py   # JSONL raw -> CSV legible
   analyze_candidates.py   # embudo de filtros y cobertura por estrato
   select_sample.py        # muestra aleatoria final de 2.000 o 1.500 juegos
-  modelo_A/               # futuros scripts de preparación y clustering con metadatos
-  modelo_B/               # futuros scripts de clustering con metadatos y texto
+  modelo_A/               # preparación y clustering con metadatos
+  modelo_B/               # preparación de texto y clustering con metadatos + texto
+  compare_models.py       # comparación de asignaciones A_sub × B (ARI y tabla cruzada)
 data/
   steam_appids.csv        # 199.314 appids
   raw/                    # respuestas de Steam sin tocar (JSONL)
@@ -244,12 +247,13 @@ Tareas generales del proyecto:
 - [x] **Modelo B: preparar features** — crear `prepare_features.py` para
   TF-IDF de reseñas (documento por juego) y descripción, % positivas, longitud
   media, SVD, y unir con metadatos.
-- [ ] **Modelo B: clustering** — crear `cluster_metadata_text.py` y ejecutar
-  K-Means/Ward sobre la muestra de 1.942 juegos, guardar assignments.
-- [ ] **Modelo A_sub** — filtrar el clustering A sobre los 1.942 juegos para
-  comparación justa.
-- [ ] **Comparación A × B** — calcular ARI y generar tabla cruzada entre
-  A_sub y B; reportar en el README principal.
+- [x] **Modelo B: clustering** — crear `cluster_metadata_text.py` y ejecutar
+  K-Means/Ward sobre la muestra de 1.942 juegos (K-Means, k=2; silhouette
+  0,0542, DB 4,095, ARI 0,963) y guardar assignments.
+- [x] **Modelo A_sub y comparación A × B** — `scripts/compare_models.py` filtra
+  A a los appids de B, calcula el ARI y genera asignaciones alineadas y tabla
+  cruzada. Resultado: 1.942 juegos comparados, ARI **-0,0018**; tabla y resumen
+  en `modelos/comparacion_A_B/`.
 - [ ] **Validaciones externas** — descargar SteamSpy para 2.000 appids,
   cruzar con clusters y reportar cobertura de Metacritic por cluster.
 - [ ] Generar figuras para la memoria (heatmap de perfiles, precio/edad por
